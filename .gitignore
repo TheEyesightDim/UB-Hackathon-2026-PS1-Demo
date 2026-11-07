@@ -3,4 +3,6 @@
 */*.bin
 */*.cue
 */*.ps-exe
-*/*.elf
+project-example/*.dep
+project-example/*.o
+

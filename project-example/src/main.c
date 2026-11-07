@@ -76,7 +76,11 @@ int main (void) {
 		// Basically it assumes the stream to use for debugging.
 		// "Officially" you'd call it like:
 		// FntPrint(stream_id, "format string", args...)
-		FntPrint("SEE YOU LATER, SPACE COWBOY...");
+		FntPrint("SEE YOU LATER, SPACE COWBOY...\n");
+
+		// TEST for correct loading of CD files 
+		// u_long fsize = load_file("\\DATA\\DBGFNT.TIM;1");
+		// FntPrint("Filesize loaded: %d\n",fsize);
 
 		// Keep this last
 		DrawOTag(&db[db_idx].ot[512]); //draws slot 512 in ot
@@ -91,6 +95,7 @@ void init_everything() {
 	InitHeap3((void *)HEAP_START, (u_long)MAX_HEAP_SIZE);
 	
 	init_display();
+	CdInit();
 	init_dbg_font();
 }
 
@@ -140,6 +145,7 @@ void init_dbg_font() {
 
 
 u_long load_file(char * filename) {
+	CdSetDebug(2);
 	CdlFILE file;
 	int cd_read_result;
 	u_char cd_control_result[8] = {0};

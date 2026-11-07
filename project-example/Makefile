@@ -15,7 +15,7 @@ CPPFLAGS += -I$(NUGGET)/psyq/include
 LDFLAGS += -L$(NUGGET)/psyq/lib
 LDFLAGS += -Wl,--start-group
 # Add any psyq libraries here as needed (e.g. -lcd, -lspu)
-LDFLAGS += -lapi -lc -lc2 -lcard -letc -lgpu -lgs -lgte -lmath -lmcrd -lpad -lpress -lsio -lsnd -lspu
+LDFLAGS += -lapi -lc -lc2 -lcard -lcd -letc -lgpu -lgs -lgte -lmath -lmcrd -lpad -lpress -lsio -lsnd -lspu
 LDFLAGS += -Wl,--end-group
 
 include $(NUGGET)/common.mk
