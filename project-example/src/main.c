@@ -10,6 +10,7 @@
 #include <libgpu.h>
 #include <libpad.h>
 #include <libcd.h>
+#include "display.h"
 
 /*
 A lot of the setup code here is based on LameGuy64's tutorials,
@@ -22,9 +23,6 @@ of its support for fully textured and animated blender models.
 
 /* ===== PREPROCESSOR ===== */
 
-#define SCREEN_W 320
-#define SCREEN_H 240
-
 #define CD_SECTOR_SIZE 2048
 #define len_to_sectors(size) ((size + CD_SECTOR_SIZE -1) / CD_SECTOR_SIZE)
 
@@ -34,24 +32,10 @@ of its support for fully textured and animated blender models.
 #define MAX_HEAP_SIZE (1 << 20)
 #define HEAP_START (STACK_END - MAX_HEAP_SIZE)
 
-// Number of depth levels in ordering table
-#define OTSIZE 1024
-
-
-/* ===== TYPES ===== */
-typedef struct DoubleBuffer {
-	DRAWENV draw;
-	DISPENV disp;
-	u_long ot[OTSIZE];
-} DoubleBuffer ;
-
 /* ===== FUNCTIONS =====*/
 
 // Combines all initializing funcs into one call
 void init_everything();
-
-void init_display();
-void update_display();
 
 void init_dbg_font();
 
@@ -93,8 +77,9 @@ int main (void) {
 		// "Officially" you'd call it like:
 		// FntPrint(stream_id, "format string", args...)
 		FntPrint("SEE YOU LATER, SPACE COWBOY...");
-		
+
 		// Keep this last
+		DrawOTag(&db[db_idx].ot[512]); //draws slot 512 in ot
 		FntFlush(-1);
 		update_display();
 	}
