@@ -9,7 +9,7 @@ DATADIR := DATA
 AUDIODIR := AUDIO
 SRCDIR := src
 
-SRCS := $(NUGGET)/common/crt0/crt0.s $(SRCDIR)/main.c $(SRCDIR)/player.c
+SRCS := $(NUGGET)/common/crt0/crt0.s $(SRCDIR)/main.c $(SRCDIR)/display.c $(SRCDIR)/player.c $(SRCDIR)/enemy.c
 
 CPPFLAGS += -I$(NUGGET)/psyq/include
 LDFLAGS += -L$(NUGGET)/psyq/lib
