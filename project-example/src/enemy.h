@@ -15,5 +15,6 @@ extern int   enemy_count;
 
 void init_enemies();
 void draw_enemies();
+void update_enemies();
 
 #endif

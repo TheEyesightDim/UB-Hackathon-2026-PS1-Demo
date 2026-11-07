@@ -3,6 +3,8 @@
 
 Enemy enemies[MAX_ENEMIES];
 int   enemy_count = 0;
+TILE enemyTile;
+
 
 void init_enemies() {
     enemy_count = 1;
@@ -12,9 +14,12 @@ void init_enemies() {
     enemies[0].vy = 0;
 }
 
+void update_enemies() {
+    //todo
+}
+
 void draw_enemies() {
     for (int i = 0; i < enemy_count; i++) {
-        TILE enemyTile;
         setTile(&enemyTile);
         setXY0(&enemyTile, enemies[i].x, enemies[i].y);
         setWH(&enemyTile, 100, 100);
