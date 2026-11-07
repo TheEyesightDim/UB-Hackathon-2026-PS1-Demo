@@ -86,6 +86,7 @@ int main (void) {
 
 	// Main loop
 	while (true) {
+		FntOpen(16, 16, 288, 64, 0, 512);
 		// This is not used how the 4.7 Documentation says,
 		// But it works anyway because of old C jank.
 		// Basically it assumes the stream to use for debugging.
@@ -93,7 +94,6 @@ int main (void) {
 		// FntPrint(stream_id, "format string", args...)
 		FntPrint("SEE YOU LATER, SPACE COWBOY...");
 		
-
 		// Keep this last
 		FntFlush(-1);
 		update_display();
@@ -130,7 +130,6 @@ void init_display() {
 	PutDrawEnv(&db[0].draw);
 
 	// Debug font use
-	FntOpen(16, 16, 288, 64, 0, 512);
 }
 
 void update_display() {

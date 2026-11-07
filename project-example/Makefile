@@ -5,6 +5,8 @@ TYPE := ps-exe
 # If it's not on the PATH, replace it with the full path
 REDUX := $(shell which pcsx-redux)
 
+DATADIR := DATA
+AUDIODIR := AUDIO
 SRCDIR := src
 
 SRCS := $(NUGGET)/common/crt0/crt0.s $(SRCDIR)/main.c
@@ -23,7 +25,7 @@ image: $(TARGET).bin $(TARGET).cue
 
 # Multiple outputs are generated from a single invocation, so group them with `&:`
 $(TARGET).bin $(TARGET).cue &: $(TARGET).ps-exe
-	python ../mkpsxiso-helper/mkpsxiso-helper.py $(TARGET) -i $(TARGET).ps-exe -Sx
+	python ../mkpsxiso-helper/mkpsxiso-helper.py $(TARGET) -i $(TARGET).ps-exe -d $(DATADIR) -a $(AUDIODIR)/* -Sx
 
 # Load disc image into pcsx-redux and play
 play: $(TARGET).bin $(TARGET).cue
