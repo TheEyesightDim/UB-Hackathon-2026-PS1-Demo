@@ -9,7 +9,7 @@ DATADIR := DATA
 AUDIODIR := AUDIO
 SRCDIR := src
 
-SRCS := $(NUGGET)/common/crt0/crt0.s $(SRCDIR)/main.c
+SRCS := $(NUGGET)/common/crt0/crt0.s $(SRCDIR)/main.c $(SRCDIR)/player.c
 
 CPPFLAGS += -I$(NUGGET)/psyq/include
 LDFLAGS += -L$(NUGGET)/psyq/lib
@@ -23,13 +23,18 @@ include $(NUGGET)/common.mk
 # Generate bin and cue files using the mkpsxiso and the helper script
 image: $(TARGET).bin $(TARGET).cue
 
+
 # Multiple outputs are generated from a single invocation, so group them with `&:`
 $(TARGET).bin $(TARGET).cue &: $(TARGET).ps-exe
 	python ../mkpsxiso-helper/mkpsxiso-helper.py $(TARGET) -i $(TARGET).ps-exe -d $(DATADIR) -a $(AUDIODIR)/* -Sx
 
 # Load disc image into pcsx-redux and play
 play: $(TARGET).bin $(TARGET).cue
-	$(REDUX) -iso=$(TARGET).cue
+	$(REDUX) -iso=$(TARGET).cue -run
+
+# Build and run the ps-exe directly (no ISO needed)
+run: $(TARGET).ps-exe
+	$(REDUX) -exe=$(TARGET).ps-exe -run
 
 # Patch psyq headers to properly include what they use,
 # so build does not depend on include order.
@@ -40,4 +45,4 @@ fix-headers: $(NUGGET)/psyq/include
 clean::
 	rm -f *.bin *.cue *.xml
 
-.PHONY: image play
+.PHONY: image play run

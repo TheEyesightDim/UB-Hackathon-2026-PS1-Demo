@@ -5,4 +5,5 @@
 */*.ps-exe
 project-example/*.dep
 project-example/*.o
-
+project-example/src/*.dep
+project-example/src/*.o
