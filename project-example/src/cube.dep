@@ -1,0 +1,7 @@
+src/cube.o: src/cube.c ../nugget/psyq/include/stdlib.h \
+ ../nugget/psyq/include/stddef.h ../nugget/psyq/include/abs.h \
+ ../nugget/psyq/include/convert.h ../nugget/psyq/include/malloc.h \
+ ../nugget/psyq/include/qsort.h ../nugget/psyq/include/rand.h \
+ ../nugget/psyq/include/libgte.h ../nugget/psyq/include/types.h \
+ ../nugget/psyq/include/sys/types.h ../nugget/psyq/include/libetc.h \
+ ../nugget/psyq/include/libgpu.h

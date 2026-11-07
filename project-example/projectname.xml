@@ -1,0 +1,2 @@
+<?xml version='1.0' encoding='utf-8'?>
+<iso_project image_name="projectname.bin" cue_sheet="projectname.cue" no_xa="0"><track type="data"><directory_tree><file name="system.cnf" type="data" source="system.cnf" /><file name="projectn.exe" type="data" source="projectname.ps-exe" /><dummy sectors="1024" /></directory_tree></track></iso_project>

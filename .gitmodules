@@ -1,3 +1,9 @@
 [submodule "nugget"]
 	path = nugget
 	url = https://github.com/pcsx-redux/nugget
+[submodule "mkpsxiso-helper"]
+	path = mkpsxiso-helper
+	url = https://codeberg.org/OrthoMatrix/mkpsxiso-helper
+[submodule "psyq_include_what_you_use"]
+	path = psyq_include_what_you_use
+	url = https://github.com/johnbaumann/psyq_include_what_you_use.git
