@@ -12,6 +12,9 @@
 #include <libcd.h>
 #include "display.h"
 
+#include "player.h"
+#include "enemy.h"
+
 /*
 A lot of the setup code here is based on LameGuy64's tutorials,
 Nugget examples, and the example in the PS1-Blender-Exporter repo.
@@ -37,10 +40,6 @@ of its support for fully textured and animated blender models.
 // Combines all initializing funcs into one call
 void init_everything();
 
-void init_dbg_font();
-
-void init_controller();
-
 // returns the filesize of the loaded file, or 0 on error
 u_long load_file(char * filename);
 
@@ -55,11 +54,6 @@ u_long load_buffer[(1 << 16)/sizeof(u_long)];
 // List of files on disc on their sizes and other info
 // Needs to be updated on asset file changes.
 
-// Double-buffered display
-DoubleBuffer db[2];
-int db_idx;
-
-
 
 int main (void) {
 	// Call all initializers first
@@ -70,6 +64,7 @@ int main (void) {
 
 	// Main loop
 	while (true) {
+		ClearOTag(db[db_idx].ot, OTSIZE);
 		FntOpen(16, 16, 288, 64, 0, 512);
 		// This is not used how the 4.7 Documentation says,
 		// But it works anyway because of old C jank.
@@ -82,11 +77,22 @@ int main (void) {
 		// u_long fsize = load_file("\\DATA\\DBGFNT.TIM;1");
 		// FntPrint("Filesize loaded: %d\n",fsize);
 
+		update_enemies();
+		draw_enemies();
+
+		update_player();
+		draw_player();
+
 		// Keep this last
 		DrawOTag(&db[db_idx].ot[512]); //draws slot 512 in ot
 		FntFlush(-1);
 		update_display();
 	}
+}
+
+void init_dbg_font() {
+	// Load to the last texture page
+	FntLoad(960, 256);
 }
 
 void init_everything() {
@@ -97,52 +103,10 @@ void init_everything() {
 	init_display();
 	CdInit();
 	init_dbg_font();
+
+	init_enemies();
+	init_player();
 }
-
-void init_display() {
-	ResetGraph(0);
-
-	// Set the draw environment at each index to be the opposite of how it was for the display environment. The definitions overlap, but in reverse, so every screen flip, the front and back buffers trade places in a cycle.
-	SetDefDispEnv(&db[0].disp, 0, 0, SCREEN_W , SCREEN_H);
-	SetDefDispEnv(&db[1].disp, 0, SCREEN_H, SCREEN_W , SCREEN_H);
-
-	SetDefDrawEnv(&db[0].draw, 0, SCREEN_H, SCREEN_W, SCREEN_H);
-	SetDefDrawEnv(&db[1].draw, 0, 0, SCREEN_W, SCREEN_H);
-
-	// Set clear color and enable bg clear
-	setRGB0(&db[0].draw, 37, 150, 190);
-	setRGB0(&db[1].draw, 37, 150, 190);
-	db[0].draw.isbg = true;
-	db[1].draw.isbg = true;
-
-	// Apply environments
-	PutDispEnv(&db[0].disp);
-	PutDrawEnv(&db[0].draw);
-
-	// Debug font use
-}
-
-void update_display() {
-	// Wait for GPU to finish drawing, then wait for VBlank
-	DrawSync(0);
-	VSync(0);
-
-	// Flip buffers
-	db_idx = !db_idx;
-
-	// Apply environments
-	PutDispEnv(&db[db_idx].disp);
-	PutDrawEnv(&db[db_idx].draw);
-
-	// Enable display
-	SetDispMask(1);
-}
-
-void init_dbg_font() {
-	// Load to the last texture page
-	FntLoad(960, 256);
-}
-
 
 u_long load_file(char * filename) {
 	CdSetDebug(2);

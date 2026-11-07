@@ -1,6 +1,7 @@
 #ifndef DISPLAY_H
 #define DISPLAY_H
 
+#include <stdbool.h>
 #include <libgpu.h>
 #include <libetc.h>
 
