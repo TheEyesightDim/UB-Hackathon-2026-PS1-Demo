@@ -1,9 +1,0 @@
-src/main.o: src/main.c ../nugget/psyq/include/malloc.h \
- ../nugget/psyq/include/stddef.h ../nugget/psyq/include/sys/types.h \
- ../nugget/psyq/include/stdio.h \
- /home/orthonyx/Misc/gcc-mipsel-none-elf-12.3.0-linux/lib/gcc/mipsel-none-elf/12.3.0/include/stdbool.h \
- ../nugget/psyq/include/libapi.h ../nugget/psyq/include/kernel.h \
- ../nugget/psyq/include/asm.h ../nugget/psyq/include/kernel.h \
- ../nugget/psyq/include/libgte.h ../nugget/psyq/include/types.h \
- ../nugget/psyq/include/libetc.h ../nugget/psyq/include/libgpu.h \
- ../nugget/psyq/include/libpad.h
