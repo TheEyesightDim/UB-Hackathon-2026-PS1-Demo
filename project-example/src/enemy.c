@@ -18,8 +18,8 @@ static u_short enemy_rng(void) {
     return (u_short)(enemy_rng_state >> 16);
 }
 
-/* Speed ramps up gradually: +1 px/frame every 2 waves. */
-static short enemy_speed(void) { return 1 + waves / 2; }
+/* Speed ramps up gradually: +1 px/frame every 4 waves. */
+static short enemy_speed(void) { return 1 + waves / 4; }
 
 void init_enemies() {
     enemy_count = 4 + waves;
@@ -48,14 +48,32 @@ void init_enemies() {
         }
         enemies[i].vx = 0;
         enemies[i].enemy_damage = 1;
-        enemies[i].enemy_health = 2;
         enemies[i].alive = true;
         enemies[i].move_delay = enemy_rng() % 90;  /* stagger entry so they don't clump */
         enemies[i].shoot_timer = 90 + (enemy_rng() % 60);
 
-        init_3d_object(&enemies[i].model,SHAPE_DIAMOND,enemies[i].x,enemies[i].y);
-        set_3d_scale(&enemies[i].model,500);
-        set_3d_palette(&enemies[i].model, &palette_ruby);
+        if(enemy_rng() % 4 == 0){
+            /* Tough variant: pyramid, 4 HP, emerald palette, green bullets. */
+            enemies[i].enemy_health = 4;
+            init_3d_object(&enemies[i].model, SHAPE_PYRAMID, enemies[i].x, enemies[i].y);
+            set_3d_scale(&enemies[i].model, 600);
+            set_3d_palette(&enemies[i].model, &palette_emerald);
+            enemies[i].bullet_r = 120;
+            enemies[i].bullet_g = 255;
+            enemies[i].bullet_b = 180;
+        } else {
+            enemies[i].enemy_health = 2;
+            init_3d_object(&enemies[i].model, SHAPE_DIAMOND, enemies[i].x, enemies[i].y);
+            set_3d_scale(&enemies[i].model, 500);
+            set_3d_palette(&enemies[i].model, &palette_ruby);
+            enemies[i].bullet_r = 255;
+            enemies[i].bullet_g = 64;
+            enemies[i].bullet_b = 64;
+        }
+        /* Random initial spin so enemies don't all start aligned. */
+        enemies[i].model.rotation.vx = enemy_rng() & 0xFFFF;
+        enemies[i].model.rotation.vy = enemy_rng() & 0xFFFF;
+        enemies[i].model.rotation.vz = enemy_rng() & 0xFFFF;
     }
     wave_banner_timer = 180;  /* show "WAVE N" for ~3s */
 }
@@ -104,7 +122,7 @@ void update_enemies (){
                     //allows the enemy to shoot
                     //resets timer to wait again
                     else{
-                        fire_enemy_bullet(enemies[i].x, enemies[i].y);
+                        fire_enemy_bullet(enemies[i].x, enemies[i].y, enemies[i].bullet_r, enemies[i].bullet_g, enemies[i].bullet_b);
                         enemies[i].shoot_timer = 90 - (2 * waves) + (enemy_rng() % 30);
                     }
                     //destorys bullet if it collides with player

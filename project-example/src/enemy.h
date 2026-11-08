@@ -21,7 +21,7 @@ typedef struct {
     enum State state;
     short move_delay;       /* frames before this enemy starts moving */
     short shoot_timer;
-
+    u_char bullet_r, bullet_g, bullet_b;  /* color of this enemy's bullets */
     Object3D model;
 } Enemy;
 

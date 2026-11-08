@@ -13,6 +13,7 @@ typedef struct {
     short x, y;       // screen position (center of bullet)
     short vx, vy;     // velocity
     short alive;      // 1 = active, 0 = free slot
+    u_char r, g, b;   // bullet color
 } Bullet;
 
 /* Two independent pools: player bullets and enemy bullets. */
@@ -30,9 +31,9 @@ void draw_bullets();
  * No-op if all slots are in use. */
 void fire_player_bullet(short x, short y);
 
-/* Spawn an enemy bullet at (x,y) traveling forward (to the left).
- * No-op if all slots are in use. */
-void fire_enemy_bullet(short x, short y);
+/* Spawn an enemy bullet at (x,y) traveling forward (to the left)
+ * in the given color. No-op if all slots are in use. */
+void fire_enemy_bullet(short x, short y, u_char r, u_char g, u_char b);
 
 /* True if a live player bullet is within `threshold` pixels of (x,y).
  * Kills (frees) that bullet on a hit. Uses squared distance (no sqrt). */

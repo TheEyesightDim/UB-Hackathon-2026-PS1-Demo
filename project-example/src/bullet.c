@@ -33,13 +33,13 @@ static void update_set(Bullet *set, int max, int *count) {
     }
 }
 
-static void draw_set(Bullet *set, int max, TILE *tiles, int w, int h, int r, int g, int b) {
+static void draw_set(Bullet *set, int max, TILE *tiles, int w, int h) {
     for (int i = 0; i < max; i++) {
         if (!set[i].alive) continue;
         setTile(&tiles[i]);
         setXY0(&tiles[i], set[i].x - w / 2, set[i].y - h / 2);
         setWH(&tiles[i], w, h);
-        setRGB0(&tiles[i], r, g, b);
+        setRGB0(&tiles[i], set[i].r, set[i].g, set[i].b);
         addPrim(&db[db_idx].ot[512], &tiles[i]);
     }
 }
@@ -63,13 +63,16 @@ void fire_player_bullet(short x, short y) {
         player_bullets[i].y = y;
         player_bullets[i].vx = BULLET_SPEED;
         player_bullets[i].vy = 0;
+        player_bullets[i].r = 255;
+        player_bullets[i].g = 255;
+        player_bullets[i].b = 128;
         player_bullets[i].alive = 1;
         player_bullet_count++;
         return;
     }
 }
 
-void fire_enemy_bullet(short x, short y) {
+void fire_enemy_bullet(short x, short y, u_char r, u_char g, u_char b) {
     for (int i = 0; i < MAX_ENEMY_BULLETS; i++) {
         if (enemy_bullets[i].alive) continue;
         // Spawn just in front of the shooter (forward = left).
@@ -77,6 +80,9 @@ void fire_enemy_bullet(short x, short y) {
         enemy_bullets[i].y = y;
         enemy_bullets[i].vx = -ENEMY_BULLET_SPEED;
         enemy_bullets[i].vy = 0;
+        enemy_bullets[i].r = r;
+        enemy_bullets[i].g = g;
+        enemy_bullets[i].b = b;
         enemy_bullets[i].alive = 1;
         enemy_bullet_count++;
         return;
@@ -89,9 +95,9 @@ void update_bullets() {
 }
 
 void draw_bullets() {
-    // Player bullets: yellow (14x5). Enemy bullets: red, a bit smaller (10x4).
-    draw_set(player_bullets, MAX_PLAYER_BULLETS, playerBulletTiles, 14, 5, 255, 255, 128);
-    draw_set(enemy_bullets, MAX_ENEMY_BULLETS, enemyBulletTiles, 10, 4, 255, 64, 64);
+    // Per-bullet color; player = yellow, enemy = set at fire time.
+    draw_set(player_bullets, MAX_PLAYER_BULLETS, playerBulletTiles, 14, 5);
+    draw_set(enemy_bullets, MAX_ENEMY_BULLETS, enemyBulletTiles, 10, 4);
 }
 
 bool player_bullet_collides(short x, short y, int threshold) {
