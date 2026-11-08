@@ -8,7 +8,7 @@
 #include <libetc.h>
 
 /* Frames between shots (cooldown). */
-#define FIRE_COOLDOWN 5
+#define FIRE_COOLDOWN 10
 
 /* Movement tuning (16.16 fixed-point: 65536 = 1.0 px/frame).
  * ACCEL 0.25, FRICTION 0.25, MAX 4.0 → floaty build-up and coast. */
@@ -98,7 +98,11 @@ void update_player() {
         player.hp--;
         if (player.hp < 0) player.hp = 0;
         play_sfx(SFX_HURT);
+        flash_3d_object(&player.cube, FLASH_RAINBOW, 30); /* rainbow flash on hit */
     }
+
+    // Advance any active color flash (rainbow sweep, restores palette)
+    update_3d_flash(&player.cube);
 }
 
 void draw_player() {

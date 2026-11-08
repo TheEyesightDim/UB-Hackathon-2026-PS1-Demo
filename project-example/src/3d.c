@@ -233,6 +233,9 @@ void init_3d_object(Object3D *obj, ShapeType shape,
         obj->palette.colors[i].b = 255;
     }
     obj->palette.num_colors = 1;
+    obj->flash_frames = 0;
+    obj->flash_hue = 0;
+    obj->flash_mode = FLASH_RAINBOW;
 }
 
 void set_3d_palette(Object3D *obj, const ColorPalette *palette) {
@@ -241,6 +244,62 @@ void set_3d_palette(Object3D *obj, const ColorPalette *palette) {
         obj->palette.colors[i] = palette->colors[i];
     }
     obj->palette.num_colors = palette->num_colors;
+}
+
+/* =====================================================================
+ * COLOR FLASH
+ * ===================================================================== */
+
+/* Hue (0-255) → full-brightness RGB, six-sector rainbow. */
+static void hsv_to_rgb(int hue, Color *out) {
+    int h = hue & 255;
+    int sector = h / 43;        /* 0..5 */
+    int t = (h % 43) * 6;       /* 0..252 */
+    int a = 255, b = 255 - t, c = t;
+    switch (sector) {
+        case 0:  out->r = a; out->g = c; out->b = 0;  break;
+        case 1:  out->r = b; out->g = a; out->b = 0;  break;
+        case 2:  out->r = 0; out->g = a; out->b = c;  break;
+        case 3:  out->r = 0; out->g = b; out->b = a;  break;
+        case 4:  out->r = c; out->g = 0; out->b = a;  break;
+        default: out->r = a; out->g = 0; out->b = b;  break;
+    }
+}
+
+void flash_3d_object(Object3D *obj, FlashMode mode, int frames) {
+    int i;
+    if (obj->flash_frames <= 0) {
+        /* Save the current palette so it can be restored on expiry. */
+        for (i = 0; i < MAX_FACES; i++)
+            obj->flash_saved.colors[i] = obj->palette.colors[i];
+        obj->flash_saved.num_colors = obj->palette.num_colors;
+    }
+    obj->flash_frames = frames;
+    obj->flash_hue = 0;
+    obj->flash_mode = mode;
+}
+
+void update_3d_flash(Object3D *obj) {
+    int i;
+    Color c;
+    if (obj->flash_frames <= 0) return;
+
+    obj->flash_frames--;
+    if (obj->flash_mode == FLASH_WHITE) {
+        c.r = 255; c.g = 255; c.b = 255;
+    } else {
+        hsv_to_rgb(obj->flash_hue, &c);
+        obj->flash_hue = (obj->flash_hue + 8) & 255;
+    }
+    for (i = 0; i < MAX_FACES; i++)
+        obj->palette.colors[i] = c;
+    obj->palette.num_colors = 1;
+
+    if (obj->flash_frames <= 0) {
+        for (i = 0; i < MAX_FACES; i++)
+            obj->palette.colors[i] = obj->flash_saved.colors[i];
+        obj->palette.num_colors = obj->flash_saved.num_colors;
+    }
 }
 
 void draw_3d_object(Object3D *obj, u_long *ot, int otsize) {

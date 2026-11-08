@@ -27,6 +27,17 @@
  */
 #define SFX_PITCH_NORMAL  0x1000
 
+/* Random pitch spread applied by play_sfx: ±10% of the sample's default
+ * pitch (0x1000 ± 0x191), so repeated hits don't sound machine-gunned. */
+#define SFX_PITCH_JITTER  0x191
+
+/* Tiny LCG (no stdlib on the PSX); returns 0..0xFFFF. */
+static u_long sfx_rng = 0x2545F491UL;
+static u_short sfx_rand(void) {
+    sfx_rng = sfx_rng * 1103515245UL + 12345UL;
+    return (u_short)(sfx_rng >> 16);
+}
+
 typedef struct {
     u_long  spu_addr;   /* SpuMalloc'd base in SPU RAM (0 = not loaded) */
     u_long  wdsa;       /* waveform data start = spu_addr + VAG_HEADER_SIZE */
@@ -126,7 +137,10 @@ void play_sfx_pitch(SFX_ID id, u_short pitch) {
 
 void play_sfx(SFX_ID id) {
     if (id >= SFX_COUNT) return;
-    play_sfx_pitch(id, sfx_samples[id].pitch);
+    SFX_Sample *s = &sfx_samples[id];
+    u_short p = s->pitch;
+    p += (u_short)(sfx_rand() % (2 * SFX_PITCH_JITTER + 1)) - SFX_PITCH_JITTER;
+    play_sfx_pitch(id, p);
 }
 
 void stop_sfx(SFX_ID id) {

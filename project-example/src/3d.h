@@ -47,12 +47,22 @@ typedef struct {
     int            num_faces;
 } Shape;
 
+/* Flash color modes */
+typedef enum {
+    FLASH_RAINBOW = 0, /* cycle through the rainbow */
+    FLASH_WHITE,       /* solid white */
+} FlashMode;
+
 /* A drawable 3D object (shape + transform + per-face palette) */
 typedef struct {
     ShapeType shape;
     SVECTOR   rotation;     /* fixed-point angles (1/256 degree) */
     VECTOR    translation;  /* world position */
     ColorPalette palette;   /* per-face colors (see palette.h) */
+    ColorPalette flash_saved; /* palette snapshot while a flash is active */
+    int          flash_frames; /* frames left in active flash (0 = off) */
+    int          flash_hue;    /* current flash hue (0-255) */
+    int          flash_mode;   /* FLASH_RAINBOW or FLASH_WHITE */
     VECTOR    scale;        /* fixed-point scale (0x10000 = 1.0) */
     FacePoly  polys[MAX_FACES];
 } Object3D;
@@ -77,6 +87,19 @@ void init_3d_object(Object3D *obj, ShapeType shape,
  * Pass a pointer to a ColorPalette (see palette.h for named palettes).
  */
 void set_3d_palette(Object3D *obj, const ColorPalette *palette);
+
+/*
+ * Start a flash on an object: the faces take on the given mode (rainbow
+ * sweep or solid white) for `frames` frames, then the previous palette is
+ * restored. Calling while already flashing restarts the timer.
+ */
+void flash_3d_object(Object3D *obj, FlashMode mode, int frames);
+
+/*
+ * Tick an active flash (call once per frame). Advances the hue, repaints
+ * the palette, and restores the saved palette when the flash expires.
+ */
+void update_3d_flash(Object3D *obj);
 
 /*
  * Draw a 3D object into the ordering table.

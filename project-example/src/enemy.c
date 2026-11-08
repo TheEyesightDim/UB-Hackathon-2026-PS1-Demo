@@ -102,10 +102,12 @@ void update_enemies (){
                 //destorys bullet if it collides with player
                 if(player_bullet_collides(enemies[i].x + 5, enemies[i].y + 5, 8)){
                     enemies[i].enemy_health -= 1;
+                    flash_3d_object(&enemies[i].model, FLASH_WHITE, 8); /* white flash on hit */
                 }
             }
             move_3d_object(&enemies[i].model,enemies[i].x,enemies[i].y);
             rotate_3d_object(&enemies[i].model,0,16,16);
+            update_3d_flash(&enemies[i].model);
             //kills enemy 
             if(enemies[i].alive && enemies[i].enemy_health <= 0){
                 enemies[i].alive = false;

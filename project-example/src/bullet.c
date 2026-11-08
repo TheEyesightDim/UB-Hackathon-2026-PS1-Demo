@@ -37,8 +37,8 @@ static void draw_set(Bullet *set, int max, TILE *tiles, int r, int g, int b) {
     for (int i = 0; i < max; i++) {
         if (!set[i].alive) continue;
         setTile(&tiles[i]);
-        setXY0(&tiles[i], set[i].x - 4, set[i].y - 4);
-        setWH(&tiles[i], 8, 8);
+        setXY0(&tiles[i], set[i].x - 6, set[i].y - 2);
+        setWH(&tiles[i], 12, 4);
         setRGB0(&tiles[i], r, g, b);
         addPrim(&db[db_idx].ot[512], &tiles[i]);
     }
@@ -71,7 +71,7 @@ void fire_enemy_bullet(short x, short y) {
         // Spawn just in front of the shooter (forward = left).
         enemy_bullets[i].x = x - 12;
         enemy_bullets[i].y = y;
-        enemy_bullets[i].vx = -BULLET_SPEED;
+        enemy_bullets[i].vx = -ENEMY_BULLET_SPEED;
         enemy_bullets[i].vy = 0;
         enemy_bullets[i].alive = 1;
         enemy_bullet_count++;
@@ -113,7 +113,6 @@ bool enemy_bullet_collides(short x, short y, int threshold) {
         int dy = enemy_bullets[i].y - y;
         if (dx * dx + dy * dy <= thr2) {
             enemy_bullets[i].alive = 0;
-            play_sfx(SFX_BOOM);
             return true;
         }
     }
