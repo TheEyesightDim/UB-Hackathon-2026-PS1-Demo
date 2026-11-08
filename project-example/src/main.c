@@ -70,7 +70,7 @@ int main (void) {
 
 	// Main loop
 	while (true) {
-		ClearOTag(db[db_idx].ot, OTSIZE);
+		ClearOTagR(db[db_idx].ot, OTSIZE);
 		FntOpen(16, 16, 288, 64, 0, 512);
 		// This is not used how the 4.7 Documentation says,
 		// But it works anyway because of old C jank.
@@ -90,7 +90,7 @@ int main (void) {
 		draw_player();
 
 		// Keep this last
-		DrawOTag(&db[db_idx].ot[512]); //draws slot 512 in ot
+		DrawOTag(&db[db_idx].ot[OTSIZE - 1]);
 		FntFlush(-1);
 		update_display();
 	}
