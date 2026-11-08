@@ -13,6 +13,9 @@ int     powerup_count = 0;
 /* Player collision radius (px). */
 #define POWERUP_HIT_RADIUS 20
 
+/* Split-bullet powerup duration (frames). */
+#define POWERUP_SPLIT_FRAMES 360
+
 /* Scale pulse: base 700, swings ±110 via a 64-entry sine table (phase 0..63). */
 #define POWERUP_BASE_SCALE 700
 #define POWERUP_PULSE_AMP  110
@@ -83,7 +86,8 @@ void update_powerups(void) {
         int dy = powerups[i].y - py;
         int r2 = POWERUP_HIT_RADIUS * POWERUP_HIT_RADIUS;
         if (dx * dx + dy * dy <= r2) {
-            /* TODO: apply powerup effect. For now, consume it + play sound. */
+            /* Grant the split-bullet powerup (timed) + play sound. */
+            player.split_timer = POWERUP_SPLIT_FRAMES;
             play_sfx(SFX_POWERUP);
             powerups[i].alive = 0;
             powerup_count--;

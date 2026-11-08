@@ -55,14 +55,15 @@ void clear_enemy_bullets() {
     init_set(enemy_bullets, MAX_ENEMY_BULLETS, &enemy_bullet_count);
 }
 
-void fire_player_bullet(short x, short y) {
+/* Shared spawn: find a free player-bullet slot and set its velocity/color. */
+static void spawn_player_bullet(short x, short y, short dx, short dy) {
     for (int i = 0; i < MAX_PLAYER_BULLETS; i++) {
         if (player_bullets[i].alive) continue;
         // Spawn just in front of the shooter (forward = right).
         player_bullets[i].x = x + 12;
         player_bullets[i].y = y;
-        player_bullets[i].vx = BULLET_SPEED;
-        player_bullets[i].vy = 0;
+        player_bullets[i].vx = dx;
+        player_bullets[i].vy = dy;
         player_bullets[i].r = 255;
         player_bullets[i].g = 255;
         player_bullets[i].b = 128;
@@ -70,6 +71,14 @@ void fire_player_bullet(short x, short y) {
         player_bullet_count++;
         return;
     }
+}
+
+void fire_player_bullet(short x, short y) {
+    spawn_player_bullet(x, y, BULLET_SPEED, 0);
+}
+
+void fire_player_bullet_dir(short x, short y, short dx, short dy) {
+    spawn_player_bullet(x, y, dx, dy);
 }
 
 void fire_enemy_bullet(short x, short y, u_char r, u_char g, u_char b) {
@@ -96,7 +105,7 @@ void update_bullets() {
 
 void draw_bullets() {
     // Per-bullet color; player = yellow, enemy = set at fire time.
-    draw_set(player_bullets, MAX_PLAYER_BULLETS, playerBulletTiles, 14, 5);
+    draw_set(player_bullets, MAX_PLAYER_BULLETS, playerBulletTiles, 8, 8);
     draw_set(enemy_bullets, MAX_ENEMY_BULLETS, enemyBulletTiles, 10, 4);
 }
 

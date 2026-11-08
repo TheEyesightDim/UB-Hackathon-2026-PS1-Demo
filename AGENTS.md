@@ -45,11 +45,11 @@ project-example/src/3d.h          # 3D module: Shape/Object3D/ColorPalette types
 project-example/src/3d.c          # 3D module: GTE transform + projection, shape geometry (cube, octahedron, icosahedron, pyramid, cone, torus, diamond)
 project-example/src/palette.h     # Named ColorPalette constants (diamond, emerald, ruby, sapphire, gold, neon, ice, steel)
 project-example/src/enemy.c        # Enemy logic (red tile draw), circle collision vs player bullets (threshold 50)
-project-example/src/player.c      # Player: 3D rotating cube (via 3d.h), instant-on + friction fixed-point (16.16) movement, constant bullet firing
+project-example/src/player.c      # Player: 3D rotating icosahedron (via 3d.h), friction fixed-point (16.16) movement, bullet firing (split-bullet powerup via split_timer)
 project-example/src/bullet.h      # Bullet struct, player/enemy bullet arrays, init/update/draw/fire_*/*_bullet_collides (bool, kills on hit) decls
-project-example/src/bullet.c      # Dual bullet pools (player=yellow→right, enemy=red→left), spawn/update/cull/draw, kill-on-hit circle collision
+project-example/src/bullet.c      # Dual bullet pools (player=yellow square→right, enemy=red→left), spawn/update/cull/draw, kill-on-hit circle collision; fire_player_bullet_dir for angled (split) shots
 project-example/src/powerup.h     # Powerup struct (neon torus), pool, init/clear/update/draw/spawn_powerup decls
-project-example/src/powerup.c     # Powerup pool: neon torus drifts left, spins, collides with player (no effect yet), low-chance enemy drop
+project-example/src/powerup.c     # Powerup pool: neon torus drifts left, spins, scale-pulses, collides with player → grants timed split-bullet powerup + plays SFX
 project-example/src/sfx.h         # SFX module: SFX_ID enum, init_sfx/play_sfx/play_sfx_pitch/stop_sfx decls
 project-example/src/sfx.c         # SFX module: loads VAG (4-bit ADPCM) from CD → SPU RAM, voice setup, key on/off
 project-example/src/cdaudio.h     # CD-DA track playback (play_track)

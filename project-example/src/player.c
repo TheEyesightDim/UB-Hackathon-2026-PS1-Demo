@@ -32,6 +32,7 @@ void init_player() {
     player.max_hp = 6;
     player.facing = 1;
     player.fire_timer = 0;
+    player.split_timer = 0;
     player.spin_x = 0;
     player.spin_y = 0;
 
@@ -109,10 +110,22 @@ void update_player() {
         player.fire_timer--;
     } else {
         if(button_pressed(PADRright)){
-            fire_player_bullet(px, py);
+            if (player.split_timer > 0) {
+                /* Split-bullet powerup: straight + two angled shots. */
+                fire_player_bullet(px, py);
+                fire_player_bullet_dir(px, py, BULLET_SPEED, -3);
+                fire_player_bullet_dir(px, py, BULLET_SPEED,  3);
+            } else {
+                fire_player_bullet(px, py);
+            }
             play_sfx(SFX_SHOOT);
             player.fire_timer = FIRE_COOLDOWN;
         }
+    }
+
+    /* Split-bullet powerup countdown. */
+    if (player.split_timer > 0) {
+        player.split_timer--;
     }
 
     // Check for enemy bullet hits: each hit removes its bullet and deals damage.

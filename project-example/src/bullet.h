@@ -4,7 +4,7 @@
 #include <sys/types.h>
 #include <stdbool.h>
 
-#define MAX_PLAYER_BULLETS 32
+#define MAX_PLAYER_BULLETS 128
 #define MAX_ENEMY_BULLETS  64
 #define BULLET_SPEED 6
 #define ENEMY_BULLET_SPEED 2   /* player = 6 */
@@ -30,6 +30,10 @@ void draw_bullets();
 /* Spawn a player bullet at (x,y) traveling forward (to the right).
  * No-op if all slots are in use. */
 void fire_player_bullet(short x, short y);
+
+/* Spawn a player bullet at (x,y) with the given velocity (dx,dy).
+ * Used for split-bullet angled shots. No-op if all slots are in use. */
+void fire_player_bullet_dir(short x, short y, short dx, short dy);
 
 /* Spawn an enemy bullet at (x,y) traveling forward (to the left)
  * in the given color. No-op if all slots are in use. */
