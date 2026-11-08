@@ -146,7 +146,7 @@ void update_enemies (){
                         enemies[i].shoot_timer = 90 - (2 * waves) + (enemy_rng() % 30);
                     }
                     //destorys bullet if it collides with player
-                    if(player_bullet_collides(enemies[i].x + 5, enemies[i].y + 5, 16)){
+                    if(player_bullet_collides(enemies[i].x + 5, enemies[i].y + 5, 20)){
                         enemies[i].enemy_health -= 1;
                         flash_3d_object(&enemies[i].model, FLASH_WHITE, 8); /* white flash on hit */
                     }
