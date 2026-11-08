@@ -8,13 +8,15 @@
 typedef struct {
     short x, y;
     short vx, vy;
+    short enemy_health, enemy_damage;
+    short alive;
 } Enemy;
 
 extern Enemy enemies[MAX_ENEMIES];
 extern int   enemy_count;
 
 void init_enemies();
-void draw_enemies();
 void update_enemies();
+void draw_enemies();
 
 #endif
