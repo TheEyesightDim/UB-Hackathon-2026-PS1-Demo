@@ -21,6 +21,7 @@ typedef struct {
     bool alive;
     enum State state;
     short move_delay;       /* frames before this enemy starts moving */
+    short bounce_delay;     /* frames to linger off-screen after a bounce */
     short shoot_timer;
     u_char bullet_r, bullet_g, bullet_b;  /* color of this enemy's bullets */
     Object3D model;

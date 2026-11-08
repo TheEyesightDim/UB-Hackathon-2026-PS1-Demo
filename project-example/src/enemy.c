@@ -113,21 +113,26 @@ void update_enemies (){
             // they enter the screen at staggered times instead of a clump.
             if(enemies[i].move_delay > 0){
                 enemies[i].move_delay -= 1;
+            } else if(enemies[i].bounce_delay > 0){
+                /* Linger off-screen after a bounce before re-entering. */
+                enemies[i].bounce_delay -= 1;
             } else {
                 // Boomerang: move vertically, bouncing at the screen edges.
-                // No off-screen wait — the direction flips as soon as they
-                // reach the top or bottom of the visible screen.
+                // On bounce the enemy pops off-screen, pauses briefly,
+                // then re-enters from the opposite side.
                 enemies[i].y += enemies[i].vy;
                 if(enemies[i].y <= 0 && enemies[i].vy < 0){
-                    // Reached the top moving up: reverse and move down.
-                    enemies[i].y = 0;
-                    enemies[i].state = MOVE_DOWN;
+                    // Top bounce: pop above the screen, pause, re-enter downward.
+                    enemies[i].y = -24;
                     enemies[i].vy = enemy_speed();
+                    enemies[i].state = MOVE_DOWN;
+                    enemies[i].bounce_delay = enemy_rng() % 90;
                 } else if(enemies[i].y >= SCREEN_H && enemies[i].vy > 0){
-                    // Reached the bottom moving down: reverse and move up.
-                    enemies[i].y = SCREEN_H;
-                    enemies[i].state = MOVE_UP;
+                    // Bottom bounce: pop below the screen, pause, re-enter upward.
+                    enemies[i].y = SCREEN_H + 24;
                     enemies[i].vy = -enemy_speed();
+                    enemies[i].state = MOVE_UP;
+                    enemies[i].bounce_delay = enemy_rng() % 90;
                 }
                 //enemy can only shoot when it's on screen
                 if(enemies[i].y >= 0 && enemies[i].y <= SCREEN_H - 10){
