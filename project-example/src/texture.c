@@ -67,6 +67,8 @@ void draw_image(Image * image, int x, int y, bool is_bg) {
 }
 
 void draw_image_scrolled(Image * image, int x, int y, bool is_bg, int xrate, int yrate) {
+	if (!xrate) xrate = framecount;
+	// if (!yrate) yrate = framecount;
 	SPRT * s = (SPRT *)tex_prim_next;
 	tex_prim_next += sizeof(SPRT);
     DR_TPAGE * t = (DR_TPAGE *)tex_prim_next; tex_prim_next+= sizeof(DR_TPAGE);

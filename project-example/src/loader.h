@@ -7,4 +7,4 @@
 
 extern u_long load_buffer[(1 << 16)/sizeof(u_long)];
 
-u_long load_file(char * filename);
+u_long load_file(char * filename, void * dest);
