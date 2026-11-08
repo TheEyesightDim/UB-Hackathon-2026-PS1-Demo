@@ -1,14 +1,17 @@
 #include "player.h"
 #include "palette.h"
 #include "display.h"
+#include "bullet.h"
 #include "input.h"
 #include <libgpu.h>
 #include <libetc.h>
 
+/* Frames between shots (cooldown). */
+#define FIRE_COOLDOWN 5
+
 /* ===== GLOBALS ===== */
 
 Player player;
-TILE playerTile;
 
 /* ===== FUNCTIONS ===== */
 
@@ -21,6 +24,7 @@ void init_player() {
     player.hp = 6;
     player.max_hp = 6;
     player.facing = 1;
+    player.fire_timer = 0;
 
     // Initialize the 3D system
     init_3d(SCREEN_W, SCREEN_H);
@@ -57,16 +61,17 @@ void update_player() {
 
     // Advance rotation each frame
     rotate_3d_object(&player.cube, 0, 16, 16);
+
+    // Constant shooting with a cooldown: fire when the timer expires.
+    if (player.fire_timer > 0) {
+        player.fire_timer--;
+    } else {
+        fire_player_bullet(player.x, player.y);
+        player.fire_timer = FIRE_COOLDOWN;
+    }
 }
 
 void draw_player() {
-    // 2D tile centered on the same point
-    setTile(&playerTile);
-    setXY0(&playerTile, player.x - 8, player.y - 8);
-    setWH(&playerTile, 16, 16);
-    setRGB0(&playerTile, 0, 255, 0);
-    addPrim(&db[db_idx].ot[512], &playerTile);
-
-    // 3D cube at the same position
+    // 3D cube at the player position
     draw_3d_object(&player.cube, db[db_idx].ot, OTSIZE);
 }

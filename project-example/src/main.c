@@ -21,6 +21,7 @@
 
 #include "player.h"
 #include "enemy.h"
+#include "bullet.h"
 
 /*
 A lot of the setup code here is based on LameGuy64's tutorials,
@@ -87,6 +88,9 @@ int main (void) {
 		update_enemies();
 		draw_enemies();
 
+		update_bullets();
+		draw_bullets();
+
 		update_player();
 		draw_player();
 
@@ -115,6 +119,7 @@ void init_everything() {
 	init_3d(SCREEN_W, SCREEN_H);
 	init_input();
 	init_enemies();
+	init_bullets();
 	init_player();
 }
 
