@@ -40,7 +40,7 @@ void init_player() {
     // Cube center at the player position.
     init_3d_object(&player.cube, SHAPE_ICOSAHEDRON,
                    player.x, player.y);
-    set_3d_palette(&player.cube, &palette_gold);
+    set_3d_palette(&player.cube, &palette_diamond);
     set_3d_scale(&player.cube, 500);
 }
 

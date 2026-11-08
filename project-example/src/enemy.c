@@ -18,8 +18,8 @@ static u_short enemy_rng(void) {
     return (u_short)(enemy_rng_state >> 16);
 }
 
-/* Speed ramps up gradually: +1 px/frame every 4 waves. */
-static short enemy_speed(void) { return 1 + waves / 4; }
+/* Speed ramps up gradually: +1 px/frame every 8 waves. */
+static short enemy_speed(void) { return 1 + waves / 8; }
 
 void init_enemies() {
     enemy_count = 4 + waves;
@@ -52,19 +52,31 @@ void init_enemies() {
         enemies[i].move_delay = enemy_rng() % 90;  /* stagger entry so they don't clump */
         enemies[i].shoot_timer = 90 + (enemy_rng() % 60);
 
-        if(enemy_rng() % 4 == 0){
-            /* Tough variant: pyramid, 4 HP, emerald palette, green bullets. */
-            enemies[i].enemy_health = 4;
+        /* Harder variants unlock on later waves: cube from wave 2,
+         * green pyramid from wave 4. */
+        u_short roll = enemy_rng() % 8;
+        if(roll < 1 && waves >= 4){
+            /* Rare variant: green pyramid, 6 HP, emerald palette, green bullets. */
+            enemies[i].enemy_health = 6;
             init_3d_object(&enemies[i].model, SHAPE_PYRAMID, enemies[i].x, enemies[i].y);
-            set_3d_scale(&enemies[i].model, 600);
+            set_3d_scale(&enemies[i].model, 700);
             set_3d_palette(&enemies[i].model, &palette_emerald);
             enemies[i].bullet_r = 120;
             enemies[i].bullet_g = 255;
             enemies[i].bullet_b = 180;
+        } else if(roll < 4 && waves >= 2){
+            /* Tough variant: gold cube, 4 HP, orange bullets. */
+            enemies[i].enemy_health = 4;
+            init_3d_object(&enemies[i].model, SHAPE_CUBE, enemies[i].x, enemies[i].y);
+            set_3d_scale(&enemies[i].model, 380);
+            set_3d_palette(&enemies[i].model, &palette_gold);
+            enemies[i].bullet_r = 255;
+            enemies[i].bullet_g = 160;
+            enemies[i].bullet_b = 64;
         } else {
             enemies[i].enemy_health = 2;
             init_3d_object(&enemies[i].model, SHAPE_DIAMOND, enemies[i].x, enemies[i].y);
-            set_3d_scale(&enemies[i].model, 500);
+            set_3d_scale(&enemies[i].model, 400);
             set_3d_palette(&enemies[i].model, &palette_ruby);
             enemies[i].bullet_r = 255;
             enemies[i].bullet_g = 64;
