@@ -1,5 +1,6 @@
 #include "enemy.h"
 #include "display.h"
+#include "bullet.h"
 
 
 Enemy enemies[MAX_ENEMIES];
@@ -24,22 +25,19 @@ void init_enemies() {
         enemies[i].alive = true;
         enemies[i].timer = i * 120;
         enemies[i].state = WAIT_AT_TOP;
+        enemies[i].shoot_timer = 60;
     }
 }
 
 void update_enemies (){
     for (short i = 0; i < MAX_ENEMIES; i++){
-        if(enemies[i].alive && enemies[i].enemy_health <= 0){
-            enemies[i].alive = false;
-            enemy_count -= 1;
-        }
         if(enemies[i].alive && enemies[i].state == WAIT_AT_TOP){
             if(enemies[i].timer > 0){
                 enemies[i].timer -= 1;
             }
             else{
                 enemies[i].state = MOVE_DOWN;
-                enemies[i].vy = 1;
+                enemies[i].vy = 2;
             }
         }
         if(enemies[i].alive && enemies[i].state == MOVE_DOWN){
@@ -56,7 +54,7 @@ void update_enemies (){
             }
             else{
                 enemies[i].state = MOVE_UP;
-                enemies[i].vy = -1;
+                enemies[i].vy = -2;
             } 
         }
         if(enemies[i].alive && enemies[i].state == MOVE_UP){
@@ -66,6 +64,24 @@ void update_enemies (){
                 enemies[i].vy = 0;
                 enemies[i].timer = 120;
             }
+        }
+        if(enemies[i].alive && (enemies[i].state == MOVE_UP || enemies[i].state == MOVE_DOWN) && (enemies[i].y >= 0 && enemies[i].y <= SCREEN_H - 10)){
+            if(enemies[i].shoot_timer > 0){
+                enemies[i].shoot_timer -= 1;
+            }
+            else{
+                fire_enemy_bullet(enemies[i].x, enemies[i].y);
+                enemies[i].shoot_timer = 60;
+            }
+        }
+        if(enemies[i].alive && (enemies[i].state == MOVE_UP || enemies[i].state == MOVE_DOWN) && (enemies[i].y >= 0 && enemies[i].y <= SCREEN_H - 10)){
+            if(player_bullet_collides(enemies[i].x + 5, enemies[i].y + 5, 8)){
+                enemies[i].enemy_health -= 1;
+            }
+        }
+        if(enemies[i].alive && enemies[i].enemy_health <= 0){
+            enemies[i].alive = false;
+            enemy_count -= 1;
         }
     }
     if(enemy_count <= 0){

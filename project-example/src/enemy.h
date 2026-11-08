@@ -20,6 +20,7 @@ typedef struct {
     bool alive;
     short timer;
     enum State state;
+    short shoot_timer;
 } Enemy;
 
 extern Enemy enemies[MAX_ENEMIES];
