@@ -1,8 +1,9 @@
 #include "player.h"
 #include "palette.h"
 #include "display.h"
-#include "bullet.h"
+#include "sfx.h"
 #include "input.h"
+#include "bullet.h"
 #include <libgpu.h>
 #include <libetc.h>
 
@@ -86,14 +87,17 @@ void update_player() {
     if (player.fire_timer > 0) {
         player.fire_timer--;
     } else {
-        fire_player_bullet(px, py);
-        player.fire_timer = FIRE_COOLDOWN;
+        if(button_pressed(PADRright)){
+            fire_player_bullet(px, py);
+            player.fire_timer = FIRE_COOLDOWN;
+        }
     }
 
     // Check for enemy bullet hits: each hit removes its bullet and deals damage.
     while (enemy_bullet_collides(px, py, 20)) {
         player.hp--;
         if (player.hp < 0) player.hp = 0;
+        play_sfx(SFX_HURT);
     }
 }
 

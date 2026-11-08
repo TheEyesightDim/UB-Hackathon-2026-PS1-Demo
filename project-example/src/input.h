@@ -14,8 +14,14 @@ void init_input();
 void update_input();
 
 /* True if the given button is held down this frame.
- * Pass a PAD* define from libetc.h, e.g. button_pressed(PADLleft). */
-bool button_pressed(u_long b);
+ * Pass a PAD* define from libetc.h, e.g. button_held(PADLleft). */
+bool button_held(u_long b);
+
+/* True only on the frame the button transitions from up to down. */
+bool button_just_pressed(u_long b);
+
+/* Kept for compatibility: same as button_held. */
+#define button_pressed(b) button_held(b)
 
 /* Raw button state from the last update_input() call. */
 u_long buttons_held();
