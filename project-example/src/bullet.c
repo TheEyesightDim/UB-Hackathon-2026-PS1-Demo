@@ -64,9 +64,9 @@ static void spawn_player_bullet(short x, short y, short dx, short dy) {
         player_bullets[i].y = y;
         player_bullets[i].vx = dx;
         player_bullets[i].vy = dy;
-        player_bullets[i].r = 255;
-        player_bullets[i].g = 255;
-        player_bullets[i].b = 128;
+        player_bullets[i].r = 190;
+        player_bullets[i].g = 225;
+        player_bullets[i].b = 255;
         player_bullets[i].alive = 1;
         player_bullet_count++;
         return;
