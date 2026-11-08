@@ -32,12 +32,12 @@ void fire_player_bullet(short x, short y);
  * No-op if all slots are in use. */
 void fire_enemy_bullet(short x, short y);
 
-/* True if any live player bullet is within `threshold` pixels of (x,y).
- * Uses squared distance (no sqrt). */
+/* True if a live player bullet is within `threshold` pixels of (x,y).
+ * Kills (frees) that bullet on a hit. Uses squared distance (no sqrt). */
 bool player_bullet_collides(short x, short y, int threshold);
 
-/* True if any live enemy bullet is within `threshold` pixels of (x,y).
- * Uses squared distance (no sqrt). */
+/* True if a live enemy bullet is within `threshold` pixels of (x,y).
+ * Kills (frees) that bullet on a hit. Uses squared distance (no sqrt). */
 bool enemy_bullet_collides(short x, short y, int threshold);
 
 #endif

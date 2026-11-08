@@ -44,17 +44,6 @@ static void draw_set(Bullet *set, int max, TILE *tiles, int r, int g, int b) {
     }
 }
 
-static bool set_collides(const Bullet *set, int max, short x, short y, int threshold) {
-    int thr2 = threshold * threshold;
-    for (int i = 0; i < max; i++) {
-        if (!set[i].alive) continue;
-        int dx = set[i].x - x;
-        int dy = set[i].y - y;
-        if (dx * dx + dy * dy <= thr2) return true;
-    }
-    return false;
-}
-
 /* ===== API ===== */
 
 void init_bullets() {
@@ -102,9 +91,31 @@ void draw_bullets() {
 }
 
 bool player_bullet_collides(short x, short y, int threshold) {
-    return set_collides(player_bullets, MAX_PLAYER_BULLETS, x, y, threshold);
+    int thr2 = threshold * threshold;
+    for (int i = 0; i < MAX_PLAYER_BULLETS; i++) {
+        if (!player_bullets[i].alive) continue;
+        int dx = player_bullets[i].x - x;
+        int dy = player_bullets[i].y - y;
+        if (dx * dx + dy * dy <= thr2) {
+            player_bullets[i].alive = 0;
+            player_bullet_count--;
+            return true;
+        }
+    }
+    return false;
 }
 
 bool enemy_bullet_collides(short x, short y, int threshold) {
-    return set_collides(enemy_bullets, MAX_ENEMY_BULLETS, x, y, threshold);
+    int thr2 = threshold * threshold;
+    for (int i = 0; i < MAX_ENEMY_BULLETS; i++) {
+        if (!enemy_bullets[i].alive) continue;
+        int dx = enemy_bullets[i].x - x;
+        int dy = enemy_bullets[i].y - y;
+        if (dx * dx + dy * dy <= thr2) {
+            enemy_bullets[i].alive = 0;
+            enemy_bullet_count--;
+            return true;
+        }
+    }
+    return false;
 }
