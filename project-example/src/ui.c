@@ -4,23 +4,33 @@
 #include "display.h"
 #include <sys/types.h>
 
-#define UI_PRIMBUF_SIZE 1024
 #define MARGIN 16
+#define BAR_W (SCREEN_W - 2 * MARGIN)
 #define THICKNESS 8
-
-static u_char r, g, b;
-
-static u_char primbuf[2][UI_PRIMBUF_SIZE];
-static u_char * next_prim;
+#define DRAIN_STEP 3  /* pixels per frame the bar shrinks */
 
 TILE healthbar;
+static int disp_w;      /* current displayed width (px) */
+static int hp_to_fixed; /* 65536 / max_hp, computed once (no per-frame div) */
 
 void draw_ui() {
-	r = 255;
-	SetTile(&healthbar);
-	setXY0(&healthbar, MARGIN, SCREEN_H - MARGIN);
-	// Have to use float in order to have a proper health fraction
-	setWH(&healthbar, ((float)player.hp/player.max_hp)*(SCREEN_W - 2*MARGIN), THICKNESS);
-	setRGB0(&healthbar, r, g, b);
-	addPrim(&db[db_idx].ot[0], &healthbar);
+    if (hp_to_fixed == 0) hp_to_fixed = 65536 / player.max_hp;
+    int target = (player.hp * hp_to_fixed * BAR_W) >> 16;
+
+    /* Move toward the target a fixed amount per frame (drain on damage,
+     * fill on start/heal/restart). */
+    if (disp_w > target) {
+        disp_w -= DRAIN_STEP;
+        if (disp_w < target) disp_w = target;
+    } else if (disp_w < target) {
+        disp_w += DRAIN_STEP;
+        if (disp_w > target) disp_w = target;
+    }
+    if (disp_w <= 0) return;
+
+    SetTile(&healthbar);
+    setXY0(&healthbar, MARGIN, SCREEN_H - MARGIN - THICKNESS);
+    setWH(&healthbar, disp_w, THICKNESS);
+    setRGB0(&healthbar, 255, 24, 24);
+    addPrim(&db[db_idx].ot[0], &healthbar);
 }

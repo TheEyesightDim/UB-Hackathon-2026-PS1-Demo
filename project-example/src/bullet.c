@@ -125,8 +125,8 @@ static void spawn_player_bullet(short x, short y, short dx, short dy, u_char sha
         player_bullets[i].y = y;
         player_bullets[i].vx = dx;
         player_bullets[i].vy = dy;
-        player_bullets[i].r = 190;
-        player_bullets[i].g = 225;
+        player_bullets[i].r = 225;
+        player_bullets[i].g = 240;
         player_bullets[i].b = 255;
         /* Homing bullets are always squares; otherwise use the given shape. */
         player_bullets[i].shape = homing ? BULLET_SHAPE_SQUARE : shape;

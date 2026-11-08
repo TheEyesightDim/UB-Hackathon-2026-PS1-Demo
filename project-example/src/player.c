@@ -15,7 +15,7 @@
  * ACCEL 0.25, FRICTION 0.25, MAX 4.0 → floaty build-up and coast. */
 #define PLAYER_ACCEL   16384*4
 #define PLAYER_FRICTION 16384
-#define PLAYER_MAX     262144
+#define PLAYER_MAX     196608  /* 3.0 px/frame (was 3.5) */
 
 /* ===== GLOBALS ===== */
 
@@ -112,7 +112,7 @@ void update_player() {
     if (player.fire_timer > 0) {
         player.fire_timer--;
     } else {
-        if(button_pressed(PADRright)){
+        if(button_pressed(PADRup) || button_pressed(PADRright) || button_pressed(PADRdown) || button_pressed(PADRleft)){
             u_char homing = (player.homing_timer > 0) ? 1 : 0;
             if (player.split_timer > 0) {
                 /* Split-bullet powerup: straight + two angled shots. */
