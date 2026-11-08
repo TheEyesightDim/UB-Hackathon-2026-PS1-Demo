@@ -35,8 +35,8 @@ void init_enemies() {
     for(short i = 0; i < enemy_count; i++)
     {
         //Intialization of each enemies variables
-        // Spawn off-screen (top or bottom) on the right side of the screen.
-        enemies[i].x = SCREEN_W / 2 + (enemy_rng() % (SCREEN_W / 2));
+        // Spawn off-screen (top or bottom) on the right side, 8px off the border.
+        enemies[i].x = SCREEN_W / 2 + (enemy_rng() % (SCREEN_W / 2 - 8));
         if(enemy_rng() & 1){
             // Top spawn, entering downward.
             enemies[i].y = -(10 + (enemy_rng() % 40));
@@ -122,15 +122,13 @@ void update_enemies (){
                 // On bounce the enemy pops off-screen, pauses briefly,
                 // then re-enters from the opposite side.
                 enemies[i].y += enemies[i].vy;
-                if(enemies[i].y <= 0 && enemies[i].vy < 0){
-                    // Top bounce: pop above the screen, pause, re-enter downward.
-                    enemies[i].y = -24;
+                /* Once fully off-screen, bounce: flip direction and pause
+                 * before re-entering. The enemy drifts off naturally first. */
+                if(enemies[i].vy < 0 && enemies[i].y < -24){
                     enemies[i].vy = enemy_speed();
                     enemies[i].state = MOVE_DOWN;
                     enemies[i].bounce_delay = enemy_rng() % 90;
-                } else if(enemies[i].y >= SCREEN_H && enemies[i].vy > 0){
-                    // Bottom bounce: pop below the screen, pause, re-enter upward.
-                    enemies[i].y = SCREEN_H + 24;
+                } else if(enemies[i].vy > 0 && enemies[i].y > SCREEN_H + 24){
                     enemies[i].vy = -enemy_speed();
                     enemies[i].state = MOVE_UP;
                     enemies[i].bounce_delay = enemy_rng() % 90;
@@ -163,8 +161,10 @@ void update_enemies (){
                 enemy_count -= 1;
                 /* Score: base value (1/2/3) x current wave number (1-based). */
                 score += enemies[i].score_value * (waves + 1);
-                /* Powerup drop (testing: every kill). */
-                spawn_powerup(enemies[i].x, enemies[i].y);
+                /* Low-chance powerup drop (1/11). */
+                if(enemy_rng() % 11 == 0){
+                    spawn_powerup(enemies[i].x, enemies[i].y);
+                }
             }
         }
     }
