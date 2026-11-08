@@ -1,16 +1,20 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include <sys/types.h>
+#include <stdlib.h>
+#include "3d.h"
 
 /* ===== TYPES ===== */
 
 typedef struct {
-    short x, y;       // screen position
+    short x, y;       // screen position (center of cube/tile)
     short vx, vy;     // velocity
     short hp;
     short max_hp;
     int   facing;     // 1 = right, -1 = left
+
+    // 3D cube player (uses the 3d.h module)
+    Object3D cube;
 } Player;
 
 /* ===== GLOBALS ===== */
