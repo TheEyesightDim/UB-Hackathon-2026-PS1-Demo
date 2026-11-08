@@ -23,6 +23,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "bullet.h"
+#include "sfx.h"
 
 /*
 A lot of the setup code here is based on LameGuy64's tutorials,
@@ -55,6 +56,7 @@ void spu_init();
 // void load_tim();
 
 SpuCommonAttr spu_settings;
+
 
 /* ===== GLOBALS ===== */
 
@@ -90,13 +92,9 @@ int main (void) {
 		// FntPrint(stream_id, "format string", args...)
 		FntPrint("SEE YOU LATER, SPACE COWBOY...\n");
 
-		// TEST for correct loading of CD files 
-		FntPrint("File loaded: %d bytes\n",fsize);
-		FntPrint(
-		         "texpage: %d, clut idx: %d, u: %d, v: %d, w: %d, h: %d",img.tpage_idx, img.clut_idx, img.u, img.v, img.w, img.h
-		     );
-
 		update_input();
+		FntPrint("PAD 0x%x\n", buttons_held());
+
 		update_enemies();
 		draw_enemies();
 
@@ -128,6 +126,7 @@ void init_everything() {
 	init_display();
 	CdInit();
 	spu_init();
+	init_sfx();
 	init_dbg_font();
 	
 	init_3d(SCREEN_W, SCREEN_H);

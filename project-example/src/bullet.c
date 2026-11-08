@@ -1,6 +1,6 @@
 #include "bullet.h"
 #include "display.h"
-#include <libgpu.h>
+#include "sfx.h"
 
 /* ===== GLOBALS ===== */
 
@@ -98,7 +98,7 @@ bool player_bullet_collides(short x, short y, int threshold) {
         int dy = player_bullets[i].y - y;
         if (dx * dx + dy * dy <= thr2) {
             player_bullets[i].alive = 0;
-            player_bullet_count--;
+            play_sfx(SFX_BOOM);
             return true;
         }
     }
@@ -113,7 +113,7 @@ bool enemy_bullet_collides(short x, short y, int threshold) {
         int dy = enemy_bullets[i].y - y;
         if (dx * dx + dy * dy <= thr2) {
             enemy_bullets[i].alive = 0;
-            enemy_bullet_count--;
+            play_sfx(SFX_BOOM);
             return true;
         }
     }
