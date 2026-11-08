@@ -3,6 +3,7 @@
 
 #include <sys/types.h>
 #include <stdbool.h>
+#include "3d.h"
 
 #define MAX_ENEMIES 16
 
@@ -21,6 +22,8 @@ typedef struct {
     short timer;
     enum State state;
     short shoot_timer;
+    
+    Object3D model;
 } Enemy;
 
 extern Enemy enemies[MAX_ENEMIES];

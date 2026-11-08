@@ -29,7 +29,7 @@ void init_enemies() {
         enemies[i].shoot_timer = 60;
 
         init_3d_object(&enemies[i].model,SHAPE_DIAMOND,enemies[i].x,enemies[i].y);
-
+        set_3d_scale(&enemies[i].model,500);
     }
 }
 
@@ -103,6 +103,8 @@ void update_enemies (){
                     enemies[i].enemy_health -= 1;
                 }
             }
+            move_3d_object(&enemies[i].model,enemies[i].x,enemies[i].y);
+            rotate_3d_object(&enemies[i].model,0,16,16);
             //kills enemy 
             if(enemies[i].alive && enemies[i].enemy_health <= 0){
                 enemies[i].alive = false;
