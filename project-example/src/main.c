@@ -1,3 +1,4 @@
+#include "cdaudio.h"
 #include "stddef.h"
 #include <malloc.h>
 #include <sys/types.h>
@@ -10,6 +11,7 @@
 #include <libgpu.h>
 #include <libpad.h>
 #include <libcd.h>
+#include <libspu.h>
 
 #include "display.h"
 #include "loader.h"
@@ -44,8 +46,12 @@ of its support for fully textured and animated blender models.
 // Combines all initializing funcs into one call
 void init_everything();
 
+void spu_init();
+
 
 // void load_tim();
+
+SpuCommonAttr spu_settings;
 
 /* ===== GLOBALS ===== */
 
@@ -60,9 +66,11 @@ int main (void) {
 	TIM_IMAGE test_image;
 	load_texture(load_buffer, &test_image);
 
+	play_track(2);
+
 	// Main loop
 	while (true) {
-		ClearOTagR(db[db_idx].ot, OTSIZE);
+		ClearOTag(db[db_idx].ot, OTSIZE);
 		FntOpen(16, 16, 288, 64, 0, 512);
 		// This is not used how the 4.7 Documentation says,
 		// But it works anyway because of old C jank.
@@ -82,7 +90,7 @@ int main (void) {
 		draw_player();
 
 		// Keep this last
-		DrawOTag(&db[db_idx].ot[OTSIZE-1]); //draws slot 512 in ot
+		DrawOTag(&db[db_idx].ot[512]); //draws slot 512 in ot
 		FntFlush(-1);
 		update_display();
 	}
@@ -100,6 +108,7 @@ void init_everything() {
 	
 	init_display();
 	CdInit();
+	spu_init();
 	init_dbg_font();
 
 	init_input();
@@ -108,3 +117,19 @@ void init_everything() {
 }
 
 
+void spu_init() {
+	SpuInit();
+	spu_settings.mask = (SPU_COMMON_MVOLL | SPU_COMMON_MVOLR | SPU_COMMON_CDVOLL | SPU_COMMON_CDVOLR | SPU_COMMON_CDMIX);
+
+	// Master volume (between 0 and 0x3fff)
+	spu_settings.mvol.left = spu_settings.mvol.right = 0x3fff;
+
+	// CD Volume (0 and 0x7fff)
+	spu_settings.cd.volume.left = spu_settings.cd.volume.right = 0x7fff;
+
+	spu_settings.cd.mix = SPU_ON;
+
+	SpuSetCommonAttr(&spu_settings);
+
+	SpuSetTransMode(SPU_TRANSFER_BY_DMA);
+}
