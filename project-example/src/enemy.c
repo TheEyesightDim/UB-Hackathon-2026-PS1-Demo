@@ -9,22 +9,24 @@ int   enemy_count = 0;
 short waves = 0;
 
 void init_enemies() {
-    enemy_count = MAX_ENEMIES;
+    enemy_count = 4 + (2* waves);
+    if(enemy_count >= MAX_ENEMIES){
+        enemy_count = MAX_ENEMIES;
+    }
     for(short i = 0; i < enemy_count; i++)
     {
         //Intialization of each enemies variables
-        enemies[i].x = SCREEN_W/2 + (i * 10);
+        enemies[i].x = SCREEN_W/2 + (i * 5);
         enemies[i].y = -10;
         enemies[i].vx = 0;
         enemies[i].vy = 0;
         enemies[i].enemy_damage = 1;
-        enemies[i].enemy_health = 10;
+        enemies[i].enemy_health = 2;
         if(waves > 0){
-            enemies[i].enemy_damage = enemies[i].enemy_damage + (2 * waves);
             enemies[i].enemy_health = enemies[i].enemy_health +  waves;
         }
         enemies[i].alive = true;
-        enemies[i].timer = i * 120;
+        enemies[i].timer = i * (120 - (10 * waves));
         enemies[i].state = WAIT_AT_TOP;
         enemies[i].shoot_timer = 60;
 
@@ -46,7 +48,7 @@ void update_enemies (){
                 //changes velocity to move down
                 else{
                     enemies[i].state = MOVE_DOWN;
-                    enemies[i].vy = 2;
+                    enemies[i].vy = 1 + waves;
                 }
             }
             //Works while enemy is moving down 
@@ -56,10 +58,10 @@ void update_enemies (){
                 //Stops the enemy when it's offscreen
                 //resets the velocity
                 //resets the wait time
-                if(enemies[i].y >= SCREEN_H){
+                if(enemies[i].y >= SCREEN_H + 11){
                     enemies[i].state = WAIT_AT_BOTTOM;
                     enemies[i].vy = 0;
-                    enemies[i].timer = 120;
+                    enemies[i].timer = 120 - (10 * waves);
                 }
             }
             //Works while enemy is waiting at bottom
@@ -71,7 +73,7 @@ void update_enemies (){
                 //changes velocity to move on
                 else{
                     enemies[i].state = MOVE_UP;
-                    enemies[i].vy = -2;
+                    enemies[i].vy = -(1 + waves);
                 } 
             }
             //Works while enemy is moving up
@@ -84,7 +86,7 @@ void update_enemies (){
                 if(enemies[i].y <= -10){
                     enemies[i].state = WAIT_AT_TOP;
                     enemies[i].vy = 0;
-                    enemies[i].timer = 120;
+                    enemies[i].timer = 120 - (10 * waves);
                 }
             }
             //enemy can only shoot when it's on screen
@@ -97,10 +99,10 @@ void update_enemies (){
                 //resets timer to wait again
                 else{
                     fire_enemy_bullet(enemies[i].x, enemies[i].y);
-                    enemies[i].shoot_timer = 60;
+                    enemies[i].shoot_timer = 60 - (5 * waves);
                 }
                 //destorys bullet if it collides with player
-                if(player_bullet_collides(enemies[i].x + 5, enemies[i].y + 5, 8)){
+                if(player_bullet_collides(enemies[i].x + 5, enemies[i].y + 5, 16)){
                     enemies[i].enemy_health -= 1;
                     flash_3d_object(&enemies[i].model, FLASH_WHITE, 8); /* white flash on hit */
                 }

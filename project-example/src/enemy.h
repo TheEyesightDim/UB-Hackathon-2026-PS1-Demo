@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include "3d.h"
 
-#define MAX_ENEMIES 16
+#define MAX_ENEMIES 32
 
 enum State{
     WAIT_AT_TOP = 0,
