@@ -14,6 +14,7 @@
 #include "display.h"
 #include "loader.h"
 #include "input.h"
+#include "texture.h"
 
 #include "player.h"
 #include "enemy.h"
@@ -55,6 +56,10 @@ int main (void) {
 	
 	printf("Debug printing to emulator should work!\n");
 
+	u_long fsize = load_file("\\DATA\\FSTEST.TIM;1");
+	TIM_IMAGE test_image;
+	load_texture(load_buffer, &test_image);
+
 	// Main loop
 	while (true) {
 		ClearOTag(db[db_idx].ot, OTSIZE);
@@ -67,7 +72,6 @@ int main (void) {
 		FntPrint("SEE YOU LATER, SPACE COWBOY...\n");
 
 		// TEST for correct loading of CD files 
-		u_long fsize = load_file("\\DATA\\DBGFNT.TIM;1");
 		FntPrint("Filesize loaded: %d\n",fsize);
 
 		update_input();

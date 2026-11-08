@@ -12,6 +12,7 @@
 
 // Number of depth levels in ordering table
 #define OTSIZE 1024
+#define PRIMBUFSIZE (1 << 15)
 
 /* ===== TYPES ===== */
 

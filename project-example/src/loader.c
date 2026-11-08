@@ -3,7 +3,7 @@
 u_long load_buffer[(1 << 16)/sizeof(u_long)];
 
 u_long load_file(char * filename) {
-	CdSetDebug(2);
+	// CdSetDebug(2);
 	CdlFILE file;
 	int cd_read_result;
 	u_char cd_control_result[8] = {0};
