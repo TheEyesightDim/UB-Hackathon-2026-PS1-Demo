@@ -5,7 +5,6 @@
 
 Enemy enemies[MAX_ENEMIES];
 int   enemy_count = 0;
-TILE tiles[2][MAX_ENEMIES];
 short waves = 0;
 
 void init_enemies() {
@@ -130,11 +129,7 @@ void update_waves()
 void draw_enemies() {
     for (int i = 0; i < MAX_ENEMIES; i++) {
         if(enemies[i].alive){
-            setTile(&tiles[db_idx][i]);
-            setXY0(&tiles[db_idx][i], enemies[i].x, enemies[i].y);
-            setWH(&tiles[db_idx][i], 10, 10);
-            setRGB0(&tiles[db_idx][i], 255, 0, 0);
-            addPrim(&db[db_idx].ot[512], &tiles[db_idx][i]);
+           draw_3d_object(&enemies[i].model,db[db_idx].ot,OTSIZE);
         }
     }
 }
