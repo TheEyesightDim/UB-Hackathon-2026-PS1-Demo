@@ -76,7 +76,7 @@ void init_sfx(void) {
 
     for (int i = 0; i < SFX_COUNT; i++) {
         SFX_Sample *s = &sfx_samples[i];
-        u_long fsize = load_file(s->cd_name);
+        u_long fsize = load_file(s->cd_name, 0);
         if (fsize < VAG_HEADER_SIZE) {
             printf("sfx: failed to load %s\n", s->cd_name);
             continue;

@@ -43,11 +43,11 @@ void draw_screens() {
     FntOpen(16, 32, 288, 176, 0, 512);
 
     if (screen_state == SCREEN_START) {
-        FntPrint("\n\n"
-                 "   CosmoHedron\n"
-                 "\n\n"
-                 "   PRESS START\n"
-                 "     TO PLAY\n\n");
+        // FntPrint("\n\n"
+        //          "   CosmoHedron\n"
+        //          "\n\n"
+        //          "   PRESS START\n"
+        //          "     TO PLAY\n\n");
     } else if (screen_state == SCREEN_GAME_OVER) {
         FntPrint("\n\n"
                  "    GAME OVER\n"

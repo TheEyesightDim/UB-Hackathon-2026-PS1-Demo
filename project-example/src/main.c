@@ -67,22 +67,26 @@ int main (void) {
 
 	
 	printf("Debug printing to emulator should work!\n");
+	u_char * filebuf[5][1<<15];
 
-	load_file("\\DATA\\BG1.TIM;1");
-	load_file("\\DATA\\BG2.TIM;1");
-	load_file("\\DATA\\BG3.TIM;1");
-	load_file("\\DATA\\BG4.TIM;1");
-	TIM_IMAGE tim_bg1, tim_bg2, tim_bg3, tim_bg4;
-	load_texture(load_buffer, &tim_bg1);
-	load_texture(load_buffer, &tim_bg2);
-	load_texture(load_buffer, &tim_bg3);
-	load_texture(load_buffer, &tim_bg4);
+	load_file("\\DATA\\BG01.TIM;1", filebuf[0]);
+	load_file("\\DATA\\BG02.TIM;1", filebuf[1]);
+	load_file("\\DATA\\BG03.TIM;1", filebuf[2]);
+	load_file("\\DATA\\BG04.TIM;1", filebuf[3]);
+	load_file("\\DATA\\TITLE.TIM;1",filebuf[4]);
+	TIM_IMAGE tim_bg1, tim_bg2, tim_bg3, tim_bg4, tim_bg5;
+	load_texture((u_long *)filebuf[0], &tim_bg1);
+	load_texture((u_long *)filebuf[1], &tim_bg2);
+	load_texture((u_long *)filebuf[2], &tim_bg3);
+	load_texture((u_long *)filebuf[3], &tim_bg4);
+	load_texture((u_long *)filebuf[4], &tim_bg5);
 
-	Image img_bg1, img_bg2, img_bg3, img_bg4;
+	Image img_bg1, img_bg2, img_bg3, img_bg4, img_bg5;
 	init_image(&img_bg1, &tim_bg1);
 	init_image(&img_bg2, &tim_bg2);
 	init_image(&img_bg3, &tim_bg3);
 	init_image(&img_bg4, &tim_bg4);
+	init_image(&img_bg5, &tim_bg5);
 
 	play_track(2);
 
@@ -93,11 +97,16 @@ int main (void) {
 
 		begin_image_draw();
 
-		draw_image_scrolled(&img_bg1, 0, 0, true,5,2);
-		draw_image_scrolled(&img_bg2, 0, 0, true,10,1);
-		draw_image_scrolled(&img_bg3, 0, 0, true,15,3);
-		draw_image_scrolled(&img_bg4, 0, 0, true,20,4);
-		
+		if(screen_state == SCREEN_START) {
+			draw_image(&img_bg5, 32, 0, true);
+		}
+		else 
+		{
+			draw_image_scrolled(&img_bg1, 0, 0, true,5,2);
+			draw_image_scrolled(&img_bg2, 0, 0, true,10,1);
+			draw_image_scrolled(&img_bg3, 0, 0, true,15,3);
+			draw_image_scrolled(&img_bg4, 0, 0, true,20,4);
+		}
 		update_input();
 
 		if (screen_state == SCREEN_PLAYING) {
