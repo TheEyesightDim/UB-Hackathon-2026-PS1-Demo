@@ -13,6 +13,7 @@
 #include "display.h"
 
 #include "player.h"
+#include "input.h"
 #include "enemy.h"
 
 /*
@@ -77,6 +78,7 @@ int main (void) {
 		// u_long fsize = load_file("\\DATA\\DBGFNT.TIM;1");
 		// FntPrint("Filesize loaded: %d\n",fsize);
 
+		update_input();
 		update_enemies();
 		draw_enemies();
 
@@ -104,6 +106,7 @@ void init_everything() {
 	CdInit();
 	init_dbg_font();
 
+	init_input();
 	init_enemies();
 	init_player();
 }
