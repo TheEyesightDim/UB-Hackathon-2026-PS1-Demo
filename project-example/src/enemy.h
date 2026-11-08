@@ -7,11 +7,10 @@
 
 #define MAX_ENEMIES 32
 
+/* Vertical boomerang direction (no off-screen wait states). */
 enum State{
-    WAIT_AT_TOP = 0,
-    MOVE_DOWN = 1,
-    WAIT_AT_BOTTOM = 2,
-    MOVE_UP = 3
+    MOVE_DOWN = 0,
+    MOVE_UP = 1
 };
 
 typedef struct {
@@ -19,16 +18,16 @@ typedef struct {
     short vx, vy;
     short enemy_health, enemy_damage;
     bool alive;
-    short timer;
     enum State state;
     short shoot_timer;
-    
+
     Object3D model;
 } Enemy;
 
 extern Enemy enemies[MAX_ENEMIES];
 extern int   enemy_count;
 extern short waves;
+extern short ding_timer;   /* frames until the new-wave ding plays */
 
 void init_enemies();
 void update_enemies();
