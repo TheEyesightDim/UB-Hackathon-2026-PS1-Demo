@@ -1,6 +1,7 @@
 #include "enemy.h"
 #include "display.h"
 #include "bullet.h"
+#include "palette.h"
 
 
 Enemy enemies[MAX_ENEMIES];
@@ -29,6 +30,7 @@ void init_enemies() {
 
         init_3d_object(&enemies[i].model,SHAPE_DIAMOND,enemies[i].x,enemies[i].y);
         set_3d_scale(&enemies[i].model,500);
+        set_3d_palette(&enemies[i].model, &palette_ruby)
     }
 }
 
