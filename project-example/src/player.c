@@ -23,7 +23,7 @@ void init_player() {
     player.facing = 1;
 
     // Initialize the 3D system
-    init_3d(SCREEN_W, SCREEN_H, SCREEN_Z);
+    init_3d(SCREEN_W, SCREEN_H);
     // Cube center at the player position.
     init_3d_object(&player.cube, SHAPE_ICOSAHEDRON,
                    player.x, player.y);
