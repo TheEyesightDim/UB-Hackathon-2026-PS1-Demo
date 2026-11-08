@@ -55,7 +55,8 @@ void draw_screens() {
                  "   SCORE %d\n"
                  "\n\n"
                  "   PRESS START\n"
-                 "    TO RESTART\n\n");
+                 "    TO RESTART\n\n",
+                 score);
     } else if (screen_state == SCREEN_PLAYING) {
         /* HUD: score top-left. Printed before the wave banner so the
          * banner's leading newlines still center it. */

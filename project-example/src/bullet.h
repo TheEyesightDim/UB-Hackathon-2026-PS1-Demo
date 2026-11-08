@@ -14,7 +14,13 @@ typedef struct {
     short vx, vy;     // velocity
     short alive;      // 1 = active, 0 = free slot
     u_char r, g, b;   // bullet color
+    u_char shape;     // BULLET_SHAPE_RECT or BULLET_SHAPE_SQUARE
+    u_char homing;    // 1 = steer toward nearest enemy
 } Bullet;
+
+/* Bullet draw shape. */
+#define BULLET_SHAPE_RECT   0  /* 14x5, normal player bullet */
+#define BULLET_SHAPE_SQUARE 1  /* 8x8, powerup (split) bullet */
 
 /* Two independent pools: player bullets and enemy bullets. */
 extern Bullet player_bullets[MAX_PLAYER_BULLETS];
@@ -28,12 +34,14 @@ void update_bullets();
 void draw_bullets();
 
 /* Spawn a player bullet at (x,y) traveling forward (to the right).
+ * `homing` = 1 makes it steer toward the nearest enemy.
  * No-op if all slots are in use. */
-void fire_player_bullet(short x, short y);
+void fire_player_bullet(short x, short y, u_char homing);
 
 /* Spawn a player bullet at (x,y) with the given velocity (dx,dy).
- * Used for split-bullet angled shots. No-op if all slots are in use. */
-void fire_player_bullet_dir(short x, short y, short dx, short dy);
+ * Used for split-bullet angled shots. `homing` = 1 makes it steer.
+ * No-op if all slots are in use. */
+void fire_player_bullet_dir(short x, short y, short dx, short dy, u_char homing);
 
 /* Spawn an enemy bullet at (x,y) traveling forward (to the left)
  * in the given color. No-op if all slots are in use. */

@@ -9,6 +9,7 @@
 
 /* Frames between shots (cooldown). */
 #define FIRE_COOLDOWN 15
+#define FIRE_COOLDOWN_FAST 5  /* rapid-fire powerup cooldown */
 
 /* Movement tuning (16.16 fixed-point: 65536 = 1.0 px/frame).
  * ACCEL 0.25, FRICTION 0.25, MAX 4.0 → floaty build-up and coast. */
@@ -33,6 +34,8 @@ void init_player() {
     player.facing = 1;
     player.fire_timer = 0;
     player.split_timer = 0;
+    player.fast_timer = 0;
+    player.homing_timer = 0;
     player.spin_x = 0;
     player.spin_y = 0;
 
@@ -110,22 +113,29 @@ void update_player() {
         player.fire_timer--;
     } else {
         if(button_pressed(PADRright)){
+            u_char homing = (player.homing_timer > 0) ? 1 : 0;
             if (player.split_timer > 0) {
                 /* Split-bullet powerup: straight + two angled shots. */
-                fire_player_bullet(px, py);
-                fire_player_bullet_dir(px, py, BULLET_SPEED, -3);
-                fire_player_bullet_dir(px, py, BULLET_SPEED,  3);
+                fire_player_bullet_dir(px, py, BULLET_SPEED,  0, homing);
+                fire_player_bullet_dir(px, py, BULLET_SPEED, -3, homing);
+                fire_player_bullet_dir(px, py, BULLET_SPEED,  3, homing);
             } else {
-                fire_player_bullet(px, py);
+                fire_player_bullet(px, py, homing);
             }
             play_sfx(SFX_SHOOT);
-            player.fire_timer = FIRE_COOLDOWN;
+            player.fire_timer = (player.fast_timer > 0) ? FIRE_COOLDOWN_FAST : FIRE_COOLDOWN;
         }
     }
 
-    /* Split-bullet powerup countdown. */
+    /* Powerup countdowns. */
     if (player.split_timer > 0) {
         player.split_timer--;
+    }
+    if (player.fast_timer > 0) {
+        player.fast_timer--;
+    }
+    if (player.homing_timer > 0) {
+        player.homing_timer--;
     }
 
     // Check for enemy bullet hits: each hit removes its bullet and deals damage.
