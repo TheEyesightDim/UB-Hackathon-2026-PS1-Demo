@@ -1,5 +1,6 @@
 #include "player.h"
 #include "display.h"
+#include "input.h"
 #include <libgpu.h>
 #include <libetc.h>
 
@@ -11,7 +12,6 @@ TILE playerTile;
 /* ===== FUNCTIONS ===== */
 
 void init_player() {
-    PadInit(0);
     player.x = 160;
     player.y = 200;
     player.vx = 0;
@@ -22,15 +22,13 @@ void init_player() {
 }
 
 void update_player() {
-    u_long buttons = PadRead(0);
-
     player.vx = 0;
     player.vy = 0;
 
-    if (buttons & PADLleft)  player.vx = -2;
-    if (buttons & PADLright) player.vx =  2;
-    if (buttons & PADLup)    player.vy = -2;
-    if (buttons & PADLdown)  player.vy =  2;
+    if (button_pressed(PADLleft))  player.vx = -2;
+    if (button_pressed(PADLright)) player.vx =  2;
+    if (button_pressed(PADLup))    player.vy = -2;
+    if (button_pressed(PADLdown))  player.vy =  2;
 
     if (player.vx < 0) player.facing = -1;
     if (player.vx > 0) player.facing =  1;
