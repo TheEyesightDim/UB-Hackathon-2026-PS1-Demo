@@ -68,12 +68,20 @@ int main (void) {
 	TIM_IMAGE test_image;
 	load_texture(load_buffer, &test_image);
 
+	Image img;
+	init_image(&img, &test_image);
+
 	play_track(2);
 
 	// Main loop
 	while (true) {
 		ClearOTagR(db[db_idx].ot, OTSIZE);
 		FntOpen(16, 16, 288, 64, 0, 512);
+
+		begin_image_draw();
+
+		draw_image(&img, 0, 0, true);
+		
 		// This is not used how the 4.7 Documentation says,
 		// But it works anyway because of old C jank.
 		// Basically it assumes the stream to use for debugging.
@@ -82,7 +90,10 @@ int main (void) {
 		FntPrint("SEE YOU LATER, SPACE COWBOY...\n");
 
 		// TEST for correct loading of CD files 
-		FntPrint("Filesize loaded: %d\n",fsize);
+		FntPrint("File loaded: %d bytes\n",fsize);
+		FntPrint(
+		         "texpage: %d, clut idx: %d, u: %d, v: %d, w: %d, h: %d",img.tpage_idx, img.clut_idx, img.u, img.v, img.w, img.h
+		     );
 
 		update_input();
 		update_enemies();
