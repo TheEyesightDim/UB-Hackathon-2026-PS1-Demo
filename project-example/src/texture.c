@@ -8,6 +8,9 @@
  static u_char * tex_prim_next;
  static u_char * tex_prim_end;
 
+ // used as a timer
+ static u_long framecount;
+
 void begin_image_draw() {
 	tex_prim_next = tex_primbuf[db_idx];
 	tex_prim_end = tex_prim_next + TEX_PRIMBUF_SIZE;
@@ -61,4 +64,24 @@ void draw_image(Image * image, int x, int y, bool is_bg) {
 
     addPrim(&db[db_idx].ot[(OTSIZE - 1)* is_bg], s);                    
     addPrim(&db[db_idx].ot[(OTSIZE - 1)* is_bg], t);         
+}
+
+void draw_image_scrolled(Image * image, int x, int y, bool is_bg, int xrate, int yrate) {
+	SPRT * s = (SPRT *)tex_prim_next;
+	tex_prim_next += sizeof(SPRT);
+    DR_TPAGE * t = (DR_TPAGE *)tex_prim_next; tex_prim_next+= sizeof(DR_TPAGE);
+
+    setSprt(s);
+    setShadeTex(s, 1); // show the texture's own colours
+    setXY0(s, x, y);
+    setWH(s, SCREEN_W, SCREEN_H);
+    setUV0(s, (framecount/xrate )&255, image->v);
+    s->clut = image->clut_idx;
+	// sprites have no tpage field, so select it first
+	setDrawTPage(t, 0, 0, image->tpage_idx); 
+
+    addPrim(&db[db_idx].ot[(OTSIZE - 1)* is_bg], s);                    
+    addPrim(&db[db_idx].ot[(OTSIZE - 1)* is_bg], t);         
+
+    framecount++;
 }

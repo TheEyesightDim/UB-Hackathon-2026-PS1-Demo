@@ -25,3 +25,5 @@ void begin_image_draw();
 
 // Draw a loaded texture as a flat image directly to screen
 void draw_image(Image * image, int x, int y, bool is_bg);
+
+void draw_image_scrolled(Image * image, int x, int y, bool is_bg, int xrate, int yrate);
