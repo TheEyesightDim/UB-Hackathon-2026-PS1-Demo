@@ -7,8 +7,8 @@
 /* ===== TYPES ===== */
 
 typedef struct {
-    short x, y;       // screen position (center of cube/tile)
-    short vx, vy;     // velocity
+    int x, y;         // screen position (center), 16.16 fixed-point pixels
+    int vx, vy;       // velocity, 16.16 fixed-point pixels/frame
     short hp;
     short max_hp;
     int   facing;     // 1 = right, -1 = left
