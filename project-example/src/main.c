@@ -17,6 +17,7 @@
 #include "loader.h"
 #include "input.h"
 #include "texture.h"
+#include "3d.h"
 
 #include "player.h"
 #include "enemy.h"
@@ -110,7 +111,8 @@ void init_everything() {
 	CdInit();
 	spu_init();
 	init_dbg_font();
-
+	
+	init_3d(SCREEN_W, SCREEN_H);
 	init_input();
 	init_enemies();
 	init_player();

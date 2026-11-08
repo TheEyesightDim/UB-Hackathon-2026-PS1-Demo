@@ -62,7 +62,7 @@ typedef struct {
  * Sets up GTE geometry: origin offset, screen depth.
  * Call once at startup.
  */
-void init_3d(int screen_w, int screen_h, int screen_z);
+void init_3d(int screen_w, int screen_h);
 
 /*
  * Initialize a 3D object with a given shape.

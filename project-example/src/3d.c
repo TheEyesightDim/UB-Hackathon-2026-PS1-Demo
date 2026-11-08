@@ -200,12 +200,10 @@ static Shape shapes[SHAPE_COUNT] = {
  * API
  * ===================================================================== */
 
-void init_3d(int screen_w, int screen_h, int screen_z) {
-    (void)screen_w;
-    (void)screen_h;
+void init_3d(int screen_w, int screen_h) {
     InitGeom();
     SetGeomOffset(0, 0);
-    SetGeomScreen(screen_z);
+    SetGeomScreen(SCREEN_Z);
 }
 
 const Shape *get_shape(ShapeType type) {
