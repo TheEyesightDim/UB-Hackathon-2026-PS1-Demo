@@ -18,6 +18,7 @@
 #include "input.h"
 #include "texture.h"
 #include "3d.h"
+#include "ui.h"
 
 #include "player.h"
 #include "enemy.h"
@@ -104,6 +105,8 @@ int main (void) {
 
 		update_player();
 		draw_player();
+
+		draw_ui();
 
 		// Keep this last
 		DrawOTag(&db[db_idx].ot[OTSIZE - 1]);
