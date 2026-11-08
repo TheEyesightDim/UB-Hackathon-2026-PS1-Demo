@@ -19,6 +19,7 @@ typedef struct {
     short enemy_health, enemy_damage;
     bool alive;
     enum State state;
+    short move_delay;       /* frames before this enemy starts moving */
     short shoot_timer;
 
     Object3D model;
@@ -28,7 +29,7 @@ extern Enemy enemies[MAX_ENEMIES];
 extern int   enemy_count;
 extern short waves;
 extern short ding_timer;   /* frames until the new-wave ding plays */
-
+extern short wave_banner_timer; /* frames left to show the "WAVE N" banner */
 void init_enemies();
 void update_enemies();
 void update_waves();

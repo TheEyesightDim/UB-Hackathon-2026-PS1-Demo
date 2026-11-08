@@ -14,6 +14,7 @@ void init_screens() {
 
 static void reset_game() {
     waves = 0;
+    ding_timer = 0;
     init_bullets();
     init_enemies();
     init_player();
@@ -50,5 +51,8 @@ void draw_screens() {
                  "\n\n"
                  "   PRESS START\n"
                  "    TO RESTART\n\n");
+    } else if (screen_state == SCREEN_PLAYING && wave_banner_timer > 0) {
+        /* Centered "WAVE N" banner, shown for a few seconds on each new wave. */
+        FntPrint("\n\n\n   WAVE %d\n\n", waves + 1);
     }
 }

@@ -33,12 +33,12 @@ static void update_set(Bullet *set, int max, int *count) {
     }
 }
 
-static void draw_set(Bullet *set, int max, TILE *tiles, int r, int g, int b) {
+static void draw_set(Bullet *set, int max, TILE *tiles, int w, int h, int r, int g, int b) {
     for (int i = 0; i < max; i++) {
         if (!set[i].alive) continue;
         setTile(&tiles[i]);
-        setXY0(&tiles[i], set[i].x - 6, set[i].y - 2);
-        setWH(&tiles[i], 12, 4);
+        setXY0(&tiles[i], set[i].x - w / 2, set[i].y - h / 2);
+        setWH(&tiles[i], w, h);
         setRGB0(&tiles[i], r, g, b);
         addPrim(&db[db_idx].ot[512], &tiles[i]);
     }
@@ -48,6 +48,10 @@ static void draw_set(Bullet *set, int max, TILE *tiles, int r, int g, int b) {
 
 void init_bullets() {
     init_set(player_bullets, MAX_PLAYER_BULLETS, &player_bullet_count);
+    init_set(enemy_bullets, MAX_ENEMY_BULLETS, &enemy_bullet_count);
+}
+
+void clear_enemy_bullets() {
     init_set(enemy_bullets, MAX_ENEMY_BULLETS, &enemy_bullet_count);
 }
 
@@ -85,9 +89,9 @@ void update_bullets() {
 }
 
 void draw_bullets() {
-    // Player bullets: yellow. Enemy bullets: red.
-    draw_set(player_bullets, MAX_PLAYER_BULLETS, playerBulletTiles, 255, 255, 128);
-    draw_set(enemy_bullets, MAX_ENEMY_BULLETS, enemyBulletTiles, 255, 64, 64);
+    // Player bullets: yellow (14x5). Enemy bullets: red, a bit smaller (10x4).
+    draw_set(player_bullets, MAX_PLAYER_BULLETS, playerBulletTiles, 14, 5, 255, 255, 128);
+    draw_set(enemy_bullets, MAX_ENEMY_BULLETS, enemyBulletTiles, 10, 4, 255, 64, 64);
 }
 
 bool player_bullet_collides(short x, short y, int threshold) {

@@ -22,6 +22,7 @@ extern int    player_bullet_count;
 extern int    enemy_bullet_count;
 
 void init_bullets();
+void clear_enemy_bullets();
 void update_bullets();
 void draw_bullets();
 
