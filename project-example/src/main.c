@@ -19,7 +19,7 @@
 #include "texture.h"
 #include "3d.h"
 #include "ui.h"
-
+#include "screens.h"
 #include "player.h"
 #include "enemy.h"
 #include "bullet.h"
@@ -74,7 +74,7 @@ int main (void) {
 	Image img;
 	init_image(&img, &test_image);
 
-	play_track(2);
+	//play_track(2);
 
 	// Main loop
 	while (true) {
@@ -85,26 +85,24 @@ int main (void) {
 
 		draw_image(&img, 0, 0, true);
 		
-		// This is not used how the 4.7 Documentation says,
-		// But it works anyway because of old C jank.
-		// Basically it assumes the stream to use for debugging.
-		// "Officially" you'd call it like:
-		// FntPrint(stream_id, "format string", args...)
-		FntPrint("SEE YOU LATER, SPACE COWBOY...\n");
-
 		update_input();
 		FntPrint("PAD 0x%x\n", buttons_held());
 
-		update_enemies();
-		draw_enemies();
+		if (screen_state == SCREEN_PLAYING) {
+			update_enemies();
+			draw_enemies();
 
-		update_bullets();
-		draw_bullets();
+			update_bullets();
+			draw_bullets();
 
-		update_player();
-		draw_player();
+			update_player();
+			draw_player();
 
-		draw_ui();
+			draw_ui();
+		}
+
+		update_screens();
+		draw_screens();
 
 		// Keep this last
 		DrawOTag(&db[db_idx].ot[OTSIZE - 1]);
@@ -131,6 +129,7 @@ void init_everything() {
 	
 	init_3d(SCREEN_W, SCREEN_H);
 	init_input();
+	init_screens();
 	init_enemies();
 	init_bullets();
 	init_player();

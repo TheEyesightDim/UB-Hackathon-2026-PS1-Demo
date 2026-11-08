@@ -7,7 +7,7 @@
 #define MAX_PLAYER_BULLETS 32
 #define MAX_ENEMY_BULLETS  64
 #define BULLET_SPEED 6
-#define ENEMY_BULLET_SPEED 3   /* half of player bullet speed */
+#define ENEMY_BULLET_SPEED 2   /* player = 6 */
 
 typedef struct {
     short x, y;       // screen position (center of bullet)

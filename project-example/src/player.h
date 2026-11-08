@@ -13,7 +13,7 @@ typedef struct {
     short max_hp;
     int   facing;     // 1 = right, -1 = left
     short fire_timer; // frames until next shot (cooldown)
-
+    short spin_x, spin_y; // eased rotation rate (GTE 1/256 deg/frame)
     // 3D cube player (uses the 3d.h module)
     Object3D cube;
 } Player;

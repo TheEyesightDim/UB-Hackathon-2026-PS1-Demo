@@ -5,6 +5,7 @@
 typedef enum {
 	SFX_BOOM,
 	SFX_HURT,
+	SFX_DING,
 	SFX_COUNT
 } SFX_ID;
 

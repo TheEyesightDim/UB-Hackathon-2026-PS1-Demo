@@ -49,6 +49,7 @@ typedef struct {
 static SFX_Sample sfx_samples[SFX_COUNT] = {
     { 0, 0, 2, SFX_PITCH_NORMAL, "\\DATA\\BOOM.VAG;1" },
     { 0, 0, 3, SFX_PITCH_NORMAL, "\\DATA\\HURT.VAG;1" },
+    { 0, 0, 4, SFX_PITCH_NORMAL, "\\DATA\\DING.VAG;1" },
 };
 
 /* 64-byte aligned DMA source buffer (load_buffer is only 4-byte aligned) */

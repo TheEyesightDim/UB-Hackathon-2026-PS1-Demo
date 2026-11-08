@@ -24,7 +24,7 @@ Player player;
 
 void init_player() {
     // player.x/y = center of the cube
-    player.x = 160 << 16;
+    player.x = 80 << 16;
     player.y = 120 << 16;
     player.vx = 0;
     player.vy = 0;
@@ -32,6 +32,8 @@ void init_player() {
     player.max_hp = 6;
     player.facing = 1;
     player.fire_timer = 0;
+    player.spin_x = 0;
+    player.spin_y = 0;
 
     // Initialize the 3D system
     init_3d(SCREEN_W, SCREEN_H);
@@ -40,6 +42,17 @@ void init_player() {
                    player.x, player.y);
     set_3d_palette(&player.cube, &palette_gold);
     set_3d_scale(&player.cube, 700);
+}
+
+/* Eased spin axis: snaps to `target` when it's stronger (start/reverse),
+ * otherwise coasts down on its own (1.5%/frame, min 1 step). This lets the
+ * spin outlive the velocity, so it visibly decelerates instead of stopping
+ * the instant the player's friction brings velocity to zero. */
+static short ease_spin(short cur, int target) {
+    if (target != 0 && (target > 0 ? target > cur : target < cur)) return (short)target;
+    if (cur > 2)      { int s = cur >> 6;  if (s < 1) s = 1; return (short)(cur - s); }
+    if (cur < -2)     { int s = -cur >> 6; if (s < 1) s = 1; return (short)(cur + s); }
+    return 0;
 }
 
 void update_player() {
@@ -80,8 +93,16 @@ void update_player() {
     // Cube center follows the player (1:1 mapping since z == SCREEN_Z)
     move_3d_object(&player.cube, px, py);
 
-    // Advance rotation each frame
-    rotate_3d_object(&player.cube, 0, 16, 16);
+    // Rotation follows movement: spin rate scales with speed and its
+    // direction follows the movement direction (16.16 → GTE 1/256-deg via
+    // >>12, so speed 1.0 ≈ the old constant 16). The spin snaps to the
+    // target when it's stronger (start/reverse) and coasts down on its own
+    // when the velocity fades, so it visibly decelerates.
+    int tx = player.vy >> 12;   // vertical move → tumble around X
+    int ty = player.vx >> 12;   // horizontal move → spin around Y
+    player.spin_x = ease_spin(player.spin_x, tx);
+    player.spin_y = ease_spin(player.spin_y, ty);
+    rotate_3d_object(&player.cube, player.spin_x, player.spin_y, 0);
 
     // Constant shooting with a cooldown: fire when the timer expires.
     if (player.fire_timer > 0) {
