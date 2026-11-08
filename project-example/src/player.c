@@ -69,6 +69,12 @@ void update_player() {
         fire_player_bullet(player.x, player.y);
         player.fire_timer = FIRE_COOLDOWN;
     }
+
+    // Check for enemy bullet hits: each hit removes its bullet and deals damage.
+    while (enemy_bullet_collides(player.x, player.y, 20)) {
+        player.hp--;
+        if (player.hp < 0) player.hp = 0;
+    }
 }
 
 void draw_player() {
