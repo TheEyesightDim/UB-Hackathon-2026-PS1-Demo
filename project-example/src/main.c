@@ -68,14 +68,23 @@ int main (void) {
 	
 	printf("Debug printing to emulator should work!\n");
 
-	u_long fsize = load_file("\\DATA\\FSTEST.TIM;1");
-	TIM_IMAGE test_image;
-	load_texture(load_buffer, &test_image);
+	load_file("\\DATA\\BG1.TIM;1");
+	load_file("\\DATA\\BG2.TIM;1");
+	load_file("\\DATA\\BG3.TIM;1");
+	load_file("\\DATA\\BG4.TIM;1");
+	TIM_IMAGE tim_bg1, tim_bg2, tim_bg3, tim_bg4;
+	load_texture(load_buffer, &tim_bg1);
+	load_texture(load_buffer, &tim_bg2);
+	load_texture(load_buffer, &tim_bg3);
+	load_texture(load_buffer, &tim_bg4);
 
-	Image img;
-	init_image(&img, &test_image);
+	Image img_bg1, img_bg2, img_bg3, img_bg4;
+	init_image(&img_bg1, &tim_bg1);
+	init_image(&img_bg2, &tim_bg2);
+	init_image(&img_bg3, &tim_bg3);
+	init_image(&img_bg4, &tim_bg4);
 
-	//play_track(2);
+	play_track(2);
 
 	// Main loop
 	while (true) {
@@ -84,7 +93,10 @@ int main (void) {
 
 		begin_image_draw();
 
-		draw_image(&img, 0, 0, true);
+		draw_image_scrolled(&img_bg1, 0, 0, true,5,2);
+		draw_image_scrolled(&img_bg2, 0, 0, true,10,1);
+		draw_image_scrolled(&img_bg3, 0, 0, true,15,3);
+		draw_image_scrolled(&img_bg4, 0, 0, true,20,4);
 		
 		update_input();
 
@@ -148,7 +160,7 @@ void spu_init() {
 	spu_settings.mvol.left = spu_settings.mvol.right = 0x3fff;
 
 	// CD Volume (0 and 0x7fff)
-	spu_settings.cd.volume.left = spu_settings.cd.volume.right = 0x7fff;
+	spu_settings.cd.volume.left = spu_settings.cd.volume.right = 0x3fff;
 
 	spu_settings.cd.mix = SPU_ON;
 

@@ -19,6 +19,7 @@ void draw_ui() {
 	r = 255;
 	SetTile(&healthbar);
 	setXY0(&healthbar, MARGIN, SCREEN_H - MARGIN);
+	// Have to use float in order to have a proper health fraction
 	setWH(&healthbar, ((float)player.hp/player.max_hp)*(SCREEN_W - 2*MARGIN), THICKNESS);
 	setRGB0(&healthbar, r, g, b);
 	addPrim(&db[db_idx].ot[0], &healthbar);

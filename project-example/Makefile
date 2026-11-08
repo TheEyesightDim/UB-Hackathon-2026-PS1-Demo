@@ -26,7 +26,7 @@ image: $(TARGET).bin $(TARGET).cue
 
 # Multiple outputs are generated from a single invocation, so group them with `&:`
 $(TARGET).bin $(TARGET).cue &: $(TARGET).ps-exe
-	python ../mkpsxiso-helper/mkpsxiso-helper.py $(TARGET) -i $(TARGET).ps-exe -d $(DATADIR) -a $(AUDIODIR)/* -Sx
+	python ../mkpsxiso-helper/mkpsxiso-helper.py $(TARGET) -i $(TARGET).ps-exe -d $(DATADIR) -a $(AUDIODIR)/* -S -l assets/license_data.dat -x
 
 # Load disc image into pcsx-redux and play
 play: $(TARGET).bin $(TARGET).cue
