@@ -44,7 +44,7 @@ void draw_screens() {
 
     if (screen_state == SCREEN_START) {
         FntPrint("\n\n"
-                 "   PSYQ BLASTER\n"
+                 "   CosmoHedron\n"
                  "\n\n"
                  "   PRESS START\n"
                  "     TO PLAY\n\n");

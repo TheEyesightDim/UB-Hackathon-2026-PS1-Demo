@@ -60,6 +60,7 @@ void init_enemies() {
         if(roll < 1 && waves >= 4){
             /* Rare variant: green pyramid, 6 HP, emerald palette, green bullets. */
             enemies[i].score_value = 3;
+            enemies[i].hit_radius = 24;
             enemies[i].enemy_health = 6;
             init_3d_object(&enemies[i].model, SHAPE_PYRAMID, enemies[i].x, enemies[i].y);
             set_3d_scale(&enemies[i].model, 700);
@@ -70,6 +71,7 @@ void init_enemies() {
         } else if(roll < 4 && waves >= 2){
             /* Tough variant: gold cube, 4 HP, orange bullets. */
             enemies[i].score_value = 2;
+            enemies[i].hit_radius = 18;
             enemies[i].enemy_health = 4;
             init_3d_object(&enemies[i].model, SHAPE_CUBE, enemies[i].x, enemies[i].y);
             set_3d_scale(&enemies[i].model, 380);
@@ -79,6 +81,7 @@ void init_enemies() {
             enemies[i].bullet_b = 64;
         } else {
             enemies[i].score_value = 1;
+            enemies[i].hit_radius = 16;
             enemies[i].enemy_health = 2;
             init_3d_object(&enemies[i].model, SHAPE_DIAMOND, enemies[i].x, enemies[i].y);
             set_3d_scale(&enemies[i].model, 400);
@@ -146,7 +149,7 @@ void update_enemies (){
                         enemies[i].shoot_timer = 90 - (2 * waves) + (enemy_rng() % 30);
                     }
                     //destorys bullet if it collides with player
-                    if(player_bullet_collides(enemies[i].x + 5, enemies[i].y + 5, 20)){
+                    if(player_bullet_collides(enemies[i].x + 5, enemies[i].y + 5, enemies[i].hit_radius)){
                         enemies[i].enemy_health -= 1;
                         flash_3d_object(&enemies[i].model, FLASH_WHITE, 8); /* white flash on hit */
                     }

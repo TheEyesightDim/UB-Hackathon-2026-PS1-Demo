@@ -24,6 +24,7 @@ typedef struct {
     short bounce_delay;     /* frames to linger off-screen after a bounce */
     short shoot_timer;
     u_char bullet_r, bullet_g, bullet_b;  /* color of this enemy's bullets */
+    u_char hit_radius;   /* bullet collision radius (px), scaled to shape size */
     Object3D model;
 } Enemy;
 
