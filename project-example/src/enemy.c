@@ -147,6 +147,7 @@ void update_enemies (){
                     else{
                         fire_enemy_bullet(enemies[i].x, enemies[i].y, enemies[i].bullet_r, enemies[i].bullet_g, enemies[i].bullet_b);
                         enemies[i].shoot_timer = 90 - (2 * waves) + (enemy_rng() % 30);
+                        if (enemies[i].shoot_timer < 10) enemies[i].shoot_timer = 10;
                     }
                     //destorys bullet if it collides with player
                     if(player_bullet_collides(enemies[i].x + 5, enemies[i].y + 5, enemies[i].hit_radius)){

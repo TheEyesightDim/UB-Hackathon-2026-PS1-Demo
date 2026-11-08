@@ -39,8 +39,6 @@ void init_player() {
     player.spin_x = 0;
     player.spin_y = 0;
 
-    // Initialize the 3D system
-    init_3d(SCREEN_W, SCREEN_H);
     // Cube center at the player position.
     init_3d_object(&player.cube, SHAPE_ICOSAHEDRON,
                    player.x, player.y);
