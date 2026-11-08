@@ -7,6 +7,7 @@
 
 Enemy enemies[MAX_ENEMIES];
 int   enemy_count = 0;
+int   score = 0;
 short waves = 0;
 short ding_timer = 0;
 short wave_banner_timer = 0;
@@ -57,6 +58,7 @@ void init_enemies() {
         u_short roll = enemy_rng() % 8;
         if(roll < 1 && waves >= 4){
             /* Rare variant: green pyramid, 6 HP, emerald palette, green bullets. */
+            enemies[i].score_value = 3;
             enemies[i].enemy_health = 6;
             init_3d_object(&enemies[i].model, SHAPE_PYRAMID, enemies[i].x, enemies[i].y);
             set_3d_scale(&enemies[i].model, 700);
@@ -66,6 +68,7 @@ void init_enemies() {
             enemies[i].bullet_b = 180;
         } else if(roll < 4 && waves >= 2){
             /* Tough variant: gold cube, 4 HP, orange bullets. */
+            enemies[i].score_value = 2;
             enemies[i].enemy_health = 4;
             init_3d_object(&enemies[i].model, SHAPE_CUBE, enemies[i].x, enemies[i].y);
             set_3d_scale(&enemies[i].model, 380);
@@ -74,6 +77,7 @@ void init_enemies() {
             enemies[i].bullet_g = 160;
             enemies[i].bullet_b = 64;
         } else {
+            enemies[i].score_value = 1;
             enemies[i].enemy_health = 2;
             init_3d_object(&enemies[i].model, SHAPE_DIAMOND, enemies[i].x, enemies[i].y);
             set_3d_scale(&enemies[i].model, 400);
@@ -151,6 +155,8 @@ void update_enemies (){
             if(enemies[i].alive && enemies[i].enemy_health <= 0){
                 enemies[i].alive = false;
                 enemy_count -= 1;
+                /* Score: base value (1/2/3) x current wave number (1-based). */
+                score += enemies[i].score_value * (waves + 1);
             }
         }
     }

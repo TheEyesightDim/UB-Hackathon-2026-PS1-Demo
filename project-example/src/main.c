@@ -86,7 +86,6 @@ int main (void) {
 		draw_image(&img, 0, 0, true);
 		
 		update_input();
-		FntPrint("PAD 0x%x\n", buttons_held());
 
 		if (screen_state == SCREEN_PLAYING) {
 			update_enemies();

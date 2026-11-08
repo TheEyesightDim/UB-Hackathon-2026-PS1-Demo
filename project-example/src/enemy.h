@@ -17,6 +17,7 @@ typedef struct {
     short x, y;
     short vx, vy;
     short enemy_health, enemy_damage;
+    u_char score_value;    /* base points: 1 (diamond), 2 (cube), 3 (pyramid) */
     bool alive;
     enum State state;
     short move_delay;       /* frames before this enemy starts moving */
@@ -28,6 +29,7 @@ typedef struct {
 extern Enemy enemies[MAX_ENEMIES];
 extern int   enemy_count;
 extern short waves;
+extern int   score;        /* player score: base value x wave number per kill */
 extern short ding_timer;   /* frames until the new-wave ding plays */
 extern short wave_banner_timer; /* frames left to show the "WAVE N" banner */
 void init_enemies();

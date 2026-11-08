@@ -14,6 +14,7 @@ void init_screens() {
 
 static void reset_game() {
     waves = 0;
+    score = 0;
     ding_timer = 0;
     init_bullets();
     init_enemies();
@@ -49,10 +50,17 @@ void draw_screens() {
         FntPrint("\n\n"
                  "    GAME OVER\n"
                  "\n\n"
+                 "   SCORE %d\n"
+                 "\n\n"
                  "   PRESS START\n"
                  "    TO RESTART\n\n");
-    } else if (screen_state == SCREEN_PLAYING && wave_banner_timer > 0) {
-        /* Centered "WAVE N" banner, shown for a few seconds on each new wave. */
-        FntPrint("\n\n\n   WAVE %d\n\n", waves + 1);
+    } else if (screen_state == SCREEN_PLAYING) {
+        /* HUD: score top-left. Printed before the wave banner so the
+         * banner's leading newlines still center it. */
+        FntPrint("SCORE %d\n", score);
+        if (wave_banner_timer > 0) {
+            /* Centered "WAVE N" banner, shown for a few seconds on each new wave. */
+            FntPrint("\n\n\n   WAVE %d\n\n", waves + 1);
+        }
     }
 }
