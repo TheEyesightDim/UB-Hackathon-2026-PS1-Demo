@@ -23,6 +23,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "bullet.h"
+#include "powerup.h"
 #include "sfx.h"
 
 /*
@@ -94,6 +95,9 @@ int main (void) {
 			update_bullets();
 			draw_bullets();
 
+			update_powerups();
+			draw_powerups();
+
 			update_player();
 			draw_player();
 
@@ -131,6 +135,7 @@ void init_everything() {
 	init_screens();
 	init_enemies();
 	init_bullets();
+	init_powerups();
 	init_player();
 }
 

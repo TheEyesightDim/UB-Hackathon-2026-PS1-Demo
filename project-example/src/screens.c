@@ -4,6 +4,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "bullet.h"
+#include "powerup.h"
 #include <libgpu.h>
 
 ScreenState screen_state = SCREEN_START;
@@ -17,6 +18,7 @@ static void reset_game() {
     score = 0;
     ding_timer = 0;
     init_bullets();
+    clear_powerups();
     init_enemies();
     init_player();
 }

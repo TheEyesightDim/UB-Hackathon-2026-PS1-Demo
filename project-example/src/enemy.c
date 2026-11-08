@@ -1,6 +1,7 @@
 #include "enemy.h"
 #include "display.h"
 #include "bullet.h"
+#include "powerup.h"
 #include "palette.h"
 #include "sfx.h"
 
@@ -162,6 +163,8 @@ void update_enemies (){
                 enemy_count -= 1;
                 /* Score: base value (1/2/3) x current wave number (1-based). */
                 score += enemies[i].score_value * (waves + 1);
+                /* Powerup drop (testing: every kill). */
+                spawn_powerup(enemies[i].x, enemies[i].y);
             }
         }
     }

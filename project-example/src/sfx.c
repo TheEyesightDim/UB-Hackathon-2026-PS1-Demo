@@ -52,6 +52,7 @@ static SFX_Sample sfx_samples[SFX_COUNT] = {
     { 0, 0, 3, SFX_PITCH_NORMAL, 0x3FFF, "\\DATA\\HURT.VAG;1" },
     { 0, 0, 4, SFX_PITCH_NORMAL, 0x3FFF, "\\DATA\\DING.VAG;1" },
     { 0, 0, 5, SFX_PITCH_NORMAL, 0x07FF, "\\DATA\\SHOOT.VAG;1" }, /* 12.5% vol */
+    { 0, 0, 6, SFX_PITCH_NORMAL, 0x3FFF, "\\DATA\\POWERUP.VAG;1" },
 };
 
 /* 64-byte aligned DMA source buffer (load_buffer is only 4-byte aligned) */

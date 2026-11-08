@@ -7,6 +7,7 @@ typedef enum {
 	SFX_HURT,
 	SFX_DING,
 	SFX_SHOOT,
+	SFX_POWERUP,
 	SFX_COUNT
 } SFX_ID;
 
