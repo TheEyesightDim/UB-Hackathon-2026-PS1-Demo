@@ -10,10 +10,12 @@
 #include <libgpu.h>
 #include <libpad.h>
 #include <libcd.h>
+
 #include "display.h"
+#include "loader.h"
+#include "input.h"
 
 #include "player.h"
-#include "input.h"
 #include "enemy.h"
 
 /*
@@ -41,20 +43,10 @@ of its support for fully textured and animated blender models.
 // Combines all initializing funcs into one call
 void init_everything();
 
-// returns the filesize of the loaded file, or 0 on error
-u_long load_file(char * filename);
 
 // void load_tim();
 
 /* ===== GLOBALS ===== */
-
-// Intermediate buffer, primarily for storing data loaded from CD.
-// Cast this to different types as necessary.
-u_long load_buffer[(1 << 16)/sizeof(u_long)];
-
-// List of files on disc on their sizes and other info
-// Needs to be updated on asset file changes.
-
 
 int main (void) {
 	// Call all initializers first
@@ -75,8 +67,8 @@ int main (void) {
 		FntPrint("SEE YOU LATER, SPACE COWBOY...\n");
 
 		// TEST for correct loading of CD files 
-		// u_long fsize = load_file("\\DATA\\DBGFNT.TIM;1");
-		// FntPrint("Filesize loaded: %d\n",fsize);
+		u_long fsize = load_file("\\DATA\\DBGFNT.TIM;1");
+		FntPrint("Filesize loaded: %d\n",fsize);
 
 		update_input();
 		update_enemies();
@@ -109,22 +101,6 @@ void init_everything() {
 	init_input();
 	init_enemies();
 	init_player();
-}
-
-u_long load_file(char * filename) {
-	CdSetDebug(2);
-	CdlFILE file;
-	int cd_read_result;
-	u_char cd_control_result[8] = {0};
-
-	CdSearchFile(&file, filename);
-	CdControl(CdlSetloc, (u_char *)&file.pos, cd_control_result);
-	CdRead(len_to_sectors(file.size),
-	       load_buffer,
-	       CdlModeSpeed);
-
-	// Block until read finishes
-	return !CdReadSync(0, 0) ? file.size : 0;
 }
 
 
