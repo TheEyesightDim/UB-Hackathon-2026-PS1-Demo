@@ -8,7 +8,7 @@
 #include <libetc.h>
 
 /* Frames between shots (cooldown). */
-#define FIRE_COOLDOWN 10
+#define FIRE_COOLDOWN 15
 
 /* Movement tuning (16.16 fixed-point: 65536 = 1.0 px/frame).
  * ACCEL 0.25, FRICTION 0.25, MAX 4.0 → floaty build-up and coast. */
@@ -41,7 +41,7 @@ void init_player() {
     init_3d_object(&player.cube, SHAPE_ICOSAHEDRON,
                    player.x, player.y);
     set_3d_palette(&player.cube, &palette_gold);
-    set_3d_scale(&player.cube, 700);
+    set_3d_scale(&player.cube, 500);
 }
 
 /* Eased spin axis: snaps to `target` when it's stronger (start/reverse),
@@ -110,12 +110,13 @@ void update_player() {
     } else {
         if(button_pressed(PADRright)){
             fire_player_bullet(px, py);
+            play_sfx(SFX_SHOOT);
             player.fire_timer = FIRE_COOLDOWN;
         }
     }
 
     // Check for enemy bullet hits: each hit removes its bullet and deals damage.
-    while (enemy_bullet_collides(px, py, 20)) {
+    while (enemy_bullet_collides(px, py, 10)) {
         player.hp--;
         if (player.hp < 0) player.hp = 0;
         play_sfx(SFX_HURT);

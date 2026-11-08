@@ -43,13 +43,15 @@ typedef struct {
     u_long  wdsa;       /* waveform data start = spu_addr + VAG_HEADER_SIZE */
     int     voice;      /* SPU voice number (2-23; 0-1 are CD-DA) */
     u_short pitch;      /* default pitch for this sample */
+    u_short volume;     /* L/R volume 0..0x3FFF (0x3FFF = full) */
     char    cd_name[32];/* CD file name */
 } SFX_Sample;
 
 static SFX_Sample sfx_samples[SFX_COUNT] = {
-    { 0, 0, 2, SFX_PITCH_NORMAL, "\\DATA\\BOOM.VAG;1" },
-    { 0, 0, 3, SFX_PITCH_NORMAL, "\\DATA\\HURT.VAG;1" },
-    { 0, 0, 4, SFX_PITCH_NORMAL, "\\DATA\\DING.VAG;1" },
+    { 0, 0, 2, SFX_PITCH_NORMAL, 0x3FFF, "\\DATA\\BOOM.VAG;1" },
+    { 0, 0, 3, SFX_PITCH_NORMAL, 0x3FFF, "\\DATA\\HURT.VAG;1" },
+    { 0, 0, 4, SFX_PITCH_NORMAL, 0x3FFF, "\\DATA\\DING.VAG;1" },
+    { 0, 0, 5, SFX_PITCH_NORMAL, 0x0FFF, "\\DATA\\SHOOT.VAG;1" }, /* 25% vol */
 };
 
 /* 64-byte aligned DMA source buffer (load_buffer is only 4-byte aligned) */
@@ -110,8 +112,8 @@ static void setup_voice(SFX_Sample *s, u_short pitch) {
                    | SPU_VOICE_ADSR_AR | SPU_VOICE_ADSR_DR
                    | SPU_VOICE_ADSR_SR | SPU_VOICE_ADSR_RR
                    | SPU_VOICE_ADSR_SL;
-    va.volume.left  = 0x3FFF;
-    va.volume.right = 0x3FFF;
+    va.volume.left  = s->volume;
+    va.volume.right = s->volume;
     va.pitch        = pitch;
     va.addr         = s->wdsa;
     va.a_mode       = SPU_VOICE_LINEARIncN;
