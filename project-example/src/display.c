@@ -19,8 +19,8 @@ void init_display() {
 	SetDefDrawEnv(&db[1].draw, 0, 0, SCREEN_W, SCREEN_H);
 
 	// Set clear color and enable bg clear
-	setRGB0(&db[0].draw, 37, 150, 190);
-	setRGB0(&db[1].draw, 37, 150, 190);
+	setRGB0(&db[0].draw, 0, 0, 0);
+	setRGB0(&db[1].draw, 0, 0, 0);
 	db[0].draw.isbg = true;
 	db[1].draw.isbg = true;
 
