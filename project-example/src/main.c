@@ -1,5 +1,4 @@
 #include "cdaudio.h"
-#include "stddef.h"
 #include <malloc.h>
 #include <sys/types.h>
 #include <stdio.h>
@@ -102,10 +101,10 @@ int main (void) {
 		}
 		else 
 		{
-			draw_image_scrolled(&img_bg1, 0, 0, true,5,2);
-			draw_image_scrolled(&img_bg2, 0, 0, true,10,1);
-			draw_image_scrolled(&img_bg3, 0, 0, true,15,3);
-			draw_image_scrolled(&img_bg4, 0, 0, true,20,4);
+			draw_image_scrolled(&img_bg4, 0, 0, true,5,2);
+			draw_image_scrolled(&img_bg3, 0, 0, true,10,1);
+			draw_image_scrolled(&img_bg2, 0, 0, true,15,3);
+			draw_image_scrolled(&img_bg1, 0, 0, true,20,4);
 		}
 		update_input();
 
